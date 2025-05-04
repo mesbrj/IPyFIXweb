@@ -1,6 +1,12 @@
+"""
+General Utilities
+"""
+
 def type_check(*expected_types):
     """
-    Decorator to check the types of arguments passed to a function.
+    Decorator to check the types of arguments passed to a function or methods at runtime.
+    :param expected_types: Expected types for the arguments.
+    :return: Decorated function with type checking.
     """
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -10,7 +16,3 @@ def type_check(*expected_types):
             return func(*args, **kwargs)
         return wrapper
     return decorator
-# Usage:
-# @type_check(int, int)
-# def add(a, b):
-#     return a + b
