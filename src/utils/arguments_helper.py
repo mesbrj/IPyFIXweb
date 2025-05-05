@@ -1,5 +1,5 @@
 """
-General Utilities
+General Argument Helper Utilities
 """
 
 def type_check(*expected_types):

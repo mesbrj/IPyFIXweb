@@ -1,3 +1,5 @@
+import rrdtool
+
 from core.repositories.time_series_port import timeSeriesDbPort
 from utils.arguments_helper import type_check
 
@@ -8,7 +10,7 @@ class rrdb_local(timeSeriesDbPort):
     This class implements the timeSeriesDb interface for RRDTool.
     """
 
-    @type_check(object)
+    @type_check(timeSeriesDbPort)
     def create(self) -> bool:
         """
         Create a new RRDTool database locally.
@@ -17,7 +19,7 @@ class rrdb_local(timeSeriesDbPort):
         # Implementation for creating a new RRDTool database 
         ...
 
-    @type_check(object, int, int)
+    @type_check(timeSeriesDbPort, int, int)
     def get(self, start: int, end: int) -> list:
         """
         Get time series data from the RRDTool database locally.
@@ -28,15 +30,15 @@ class rrdb_local(timeSeriesDbPort):
         # Implementation for fetching time series data from RRDTool
         print(f"(local) Fetching time series data from {start} to {end}")
 
-    @type_check(object, list)
-    def update(self, data: list) -> bool:
+    @type_check(timeSeriesDbPort, list)
+    def update(self, data: list[str]) -> bool:
         """
         Update time series data to the RRDTool database locally.
         :param data: List of time series data to be updated.
         :return: True if update is successful, False otherwise.
         """
         # Implementation for updating time series data to RRDTool
-        ...
+        print(f"(local) Updating time series data: {data}")
 
 class rrdb_s3(timeSeriesDbPort):
     """
