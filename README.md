@@ -1,3 +1,3 @@
-# WebIPyFIX (PWRI)
+# WebIPyFIX
 
 # ipfix-py-collector
