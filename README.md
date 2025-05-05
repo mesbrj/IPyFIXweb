@@ -1,3 +1,3 @@
-# PyWebREST-IPFIX (PWRI)
+# WebIPyFIX
 
 # ipfix-py-collector
