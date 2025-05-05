@@ -6,7 +6,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from ports.repositories.time_series_port import timeSeriesDb 
+from ports.repositories.time_series import timeSeriesDb 
 
 a = timeSeriesDb('local')
 a.get(2024, 2025)

@@ -3,7 +3,7 @@ import rrdtool
 #https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
 #https://oss.oetiker.ch/rrdtool/doc/rrdupdate.en.html
 
-from ports.repositories.time_series_port import timeSeriesDbPort
+from ports.repositories.time_series import timeSeriesDbPort
 from utils.arguments_helper import type_check
 
 
