@@ -4,7 +4,6 @@ import rrdtool
 #https://oss.oetiker.ch/rrdtool/doc/rrdupdate.en.html
 
 from ports.repositories.time_series import timeSeriesDbPort
-from utils.arguments_helper import type_check
 
 
 class rrdb_local(timeSeriesDbPort):
@@ -13,7 +12,6 @@ class rrdb_local(timeSeriesDbPort):
     This class implements the timeSeriesDb interface for RRDTool.
     """
 
-    @type_check(timeSeriesDbPort)
     def create(self) -> bool:
         """
         Create a new RRDTool database locally.
@@ -22,7 +20,6 @@ class rrdb_local(timeSeriesDbPort):
         # Implementation for creating a new RRDTool database 
         ...
 
-    @type_check(timeSeriesDbPort, int, int)
     def get(self, start: int, end: int) -> list:
         """
         Get time series data from the RRDTool database locally.
@@ -33,7 +30,6 @@ class rrdb_local(timeSeriesDbPort):
         # Implementation for fetching time series data from RRDTool
         print(f"(local) Fetching time series data from {start} to {end}")
 
-    @type_check(timeSeriesDbPort, list)
     def update(self, data: list[str]) -> bool:
         """
         Update time series data to the RRDTool database locally.
@@ -49,7 +45,6 @@ class rrdb_s3(timeSeriesDbPort):
     This class implements the timeSeriesDb interface for S3 storage.
     """
 
-    @type_check(object)
     def create(self) -> bool:
         """
         Create a new RRDTool database on S3.
@@ -58,7 +53,6 @@ class rrdb_s3(timeSeriesDbPort):
         # Implementation for creating a new S3 RRDTool database
         ...
 
-    @type_check(object, int, int)
     def get(self, start: int, end: int) -> list:
         """
         Get time series data from the RRDTool database on S3.
@@ -70,7 +64,6 @@ class rrdb_s3(timeSeriesDbPort):
         print(f"(s3) Fetching time series data from {start} to {end}")
 
 
-    @type_check(object, list)
     def update(self, data: list) -> bool:
         """
         Update time series data to the RRDTool database on S3.
@@ -86,7 +79,6 @@ class rrdb_memory(timeSeriesDbPort):
     This class implements the timeSeriesDb interface for in-memory storage.
     """
 
-    @type_check(object)
     def create(self) -> bool:
         """
         Create a new in-memory RRDTool database.
@@ -95,7 +87,6 @@ class rrdb_memory(timeSeriesDbPort):
         # Implementation for creating a new in-memory RRDTool database
         ...
 
-    @type_check(object, int, int)
     def get(self, start: int, end: int) -> list:
         """
         Get time series data from the in-memory RRDTool database.
@@ -106,7 +97,6 @@ class rrdb_memory(timeSeriesDbPort):
         # Implementation for fetching time series data from in-memory RRDTool
         print(f"(memory) Fetching time series data from {start} to {end}")
 
-    @type_check(object, list)
     def update(self, data: list) -> bool:
         """
         Update time series data to the in-memory RRDTool database.
