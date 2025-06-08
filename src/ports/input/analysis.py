@@ -25,12 +25,12 @@ class pcapPort(ABC):
 def analysisService(type: str = "time-series") -> ipfixPort | pcapPort | timeSeriesPort:
     """
     Factory function to create an instance of analysisService.
-    :param type: Type of analysis service to create. Default is "ipfix".
+    :param type: Type of analysis service to create. Default is "time-series".
     Other options can be added in the future.
-    :return: An instance of ipfixService or pcapService analysis service.
+    :return: An instance of the specified analysis service type.
     """
-    from core.use_cases.analyses.time_series import service as ts_service
     if type == "time-series":
+        from core.use_cases.analyses.time_series import service as ts_service
         return ts_service()
     else:
         raise ValueError(f"Unknown analysis service type: {type}")
