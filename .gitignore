@@ -1,3 +1,7 @@
+# IPyFIXweb workspace/project Auto Generated Backup and temp files
+*.drawio.bkp
+*.drawio.dtmp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

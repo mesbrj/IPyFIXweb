@@ -1,107 +1,108 @@
-import rrdtool
-#https://oss.oetiker.ch/rrdtool/doc/rrdtool.en.html
-#https://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html
-#https://oss.oetiker.ch/rrdtool/doc/rrdupdate.en.html
+'''
+RRDTool Databases (File System) Adapter
+This module provides an implementation of the timeSeriesDbPort interface (port) for RRDTool. Data-Access implementation for local and S3 storage.
+https://oss.oetiker.ch/rrdtool/doc/rrdtool.en.html
+'''
 
+import rrdtool
 from ports.repositories.time_series import timeSeriesDbPort
 
 
-class rrdb_local(timeSeriesDbPort):
+class rrdb:
     """
-    Class for interacting with a local RRDTool database.
-    This class implements the timeSeriesDb interface for RRDTool.
+    Base class for RRDTool database
     """
+    def __init__(self, path: str = None):
+        if path:
+            self._path = path
+        else:
+            self._path = None
+    @property
+    def path(self) -> str:
+        if not self._path:
+            raise rrdb_error("path_not_set")
+        return self._path
+    @path.setter
+    def path(self, path: str) -> None:
+        if not self._path:
+            self._path = path
+    @path.deleter
+    def path(self) -> None:
+        pass
 
-    def create(self) -> bool:
-        """
-        Create a new RRDTool database locally.
-        :return: True if creation is successful, False otherwise.
-        """
-        # Implementation for creating a new RRDTool database 
-        ...
 
-    def get(self, start: int, end: int) -> list:
-        """
-        Get time series data from the RRDTool database locally.
-        :param start: Start date in epoch format.
-        :param end: End date in epoch format.
-        :return: List of time series data.
-        """
-        # Implementation for fetching time series data from RRDTool
-        print(f"(local) Fetching time series data from {start} to {end}")
-
-    def update(self, data: list[str]) -> bool:
-        """
-        Update time series data to the RRDTool database locally.
-        :param data: List of time series data to be updated.
-        :return: True if update is successful, False otherwise.
-        """
-        # Implementation for updating time series data to RRDTool
-        print(f"(local) Updating time series data: {data}")
-
-class rrdb_s3(timeSeriesDbPort):
+class rrdb_local(timeSeriesDbPort, rrdb):
     """
-    Class for interacting with a RRDTool database on S3.
-    This class implements the timeSeriesDb interface for S3 storage.
+    Class for interacting with a local RRDTool database (read/write mode).
+    This class implements the timeSeriesDb interface (port) for local storage
     """
 
-    def create(self) -> bool:
-        """
-        Create a new RRDTool database on S3.
-        :return: True if creation is successful, False otherwise.
-        """
-        # Implementation for creating a new S3 RRDTool database
-        ...
+    def info(self, options) -> dict:
+        if not self.path:
+            raise rrdb_error("path_not_set")
+        return rrdtool.info(self.path)
 
-    def get(self, start: int, end: int) -> list:
-        """
-        Get time series data from the RRDTool database on S3.
-        :param start: Start date in epoch format.
-        :param end: End date in epoch format.
-        :return: List of time series data.
-        """
-        # Implementation for fetching time series data from RRDTool on S3
-        print(f"(s3) Fetching time series data from {start} to {end}")
+    def create(self, options) -> bool:
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def update(self, data) -> bool:
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def fetch(self, start: int, end: int, options):
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def export(self, start: int, end: int, options, output_type):
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def delete(self, options):
+        if not self.path:
+            raise rrdb_error("path_not_set")
 
 
-    def update(self, data: list) -> bool:
-        """
-        Update time series data to the RRDTool database on S3.
-        :param data: List of time series data to be updated.
-        :return: True if update is successful, False otherwise.
-        """
-        # Implementation for updating time series data to RRDTool on S3
-        ...
-
-class rrdb_memory(timeSeriesDbPort):
+class rrdb_s3(timeSeriesDbPort, rrdb):
     """
-    Class for interacting with a RRDTool database in memory.
-    This class implements the timeSeriesDb interface for in-memory storage.
+    Class for interacting with a RRDTool database on S3 (read only mode).
+    This class implements the timeSeriesDb interface (port) for S3 storage.
     """
 
-    def create(self) -> bool:
-        """
-        Create a new in-memory RRDTool database.
-        :return: True if creation is successful, False otherwise.
-        """
-        # Implementation for creating a new in-memory RRDTool database
-        ...
+    def info(self, options) -> dict:
+        if not self.path:
+            raise rrdb_error("path_not_set")
 
-    def get(self, start: int, end: int) -> list:
-        """
-        Get time series data from the in-memory RRDTool database.
-        :param start: Start date in epoch format.
-        :param end: End date in epoch format.
-        :return: List of time series data.
-        """
-        # Implementation for fetching time series data from in-memory RRDTool
-        print(f"(memory) Fetching time series data from {start} to {end}")
+    def create(self, options) -> bool:
+        if not self.path:
+            raise rrdb_error("path_not_set")
 
-    def update(self, data: list) -> bool:
-        """
-        Update time series data to the in-memory RRDTool database.
-        :param data: List of time series data to be updated.
-        :return: True if update is successful, False otherwise.
-        """
-        # Implementation for updating time series data to in-memory RRDTool
-        ...
+    def update(self, data) -> bool:
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def fetch(self, start: int, end: int, options):
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def export(self, start: int, end: int, options, output_type):
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+    def delete(self, options):
+        if not self.path:
+            raise rrdb_error("path_not_set")
+
+
+class rrdb_error(Exception):
+    """
+    Custom exception class for RRDTool
+    """
+    def __init__(self, exception_type = None, message =None):
+        if exception_type == "path_not_set":
+            raise ValueError("Path is not set. Please set the 'path' property before performing operations.")
+        elif message:
+            super().__init__(message)
+            return
+        else:
+            super().__init__("An unknown error occurred in RRDTool database operations.")
