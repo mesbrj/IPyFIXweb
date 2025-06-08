@@ -7,13 +7,13 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-class timeSeriesDbPort(ABC):
+class DbPort(ABC):
     """
     Abstract base class for time series database operations.
     This class defines the interface for interacting with a time series database.
     """
     @abstractmethod
-    def info(self, options: Any) -> dict:
+    def info(self, options: Any = None) -> dict:
         """
         Get information about the time series database.
         :param options: Additional options for retrieving information (e.g., metadata, statistics).
@@ -71,7 +71,7 @@ def timeSeriesDb(
         db_type: str = "rrd",
         ts_id: Any = None,
         storage: str = None
-    ) -> timeSeriesDbPort:
+    ) -> DbPort:
     """
     Factory function to get the appropriate time series database instance.
     At this moment only RRDTool is supported, but this function can be extended to support other timeseries.
@@ -91,10 +91,10 @@ def timeSeriesDb(
         rrdb_s3,
         rrdb_local,
     )
-    if db_type != "rrd":
-        raise ValueError(f"Unknown time-series DB type: {db_type}")
     if not ts_id:
         raise ValueError("ts_id must be provided to identify the time-series instance.")
+    if db_type != "rrd":
+        raise ValueError(f"Unknown time-series DB type: {db_type}")
     if storage == 'local' or storage == None:
         return rrdb_local(ts_id)
     elif storage == 's3':

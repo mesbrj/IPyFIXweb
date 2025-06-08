@@ -1,11 +1,16 @@
 '''
 RRDTool Databases (File System) Adapter
-This module provides an implementation of the timeSeriesDbPort interface (port) for RRDTool. Data-Access implementation for local and S3 storage.
+This module provides an implementation of the interface:
+"ports.repositories.time_series.DbPort" for RRDTool.
+Data-Access implementation for local and S3 storage.
 https://oss.oetiker.ch/rrdtool/doc/rrdtool.en.html
 '''
 
+from typing import Any
+
 import rrdtool
-from ports.repositories.time_series import timeSeriesDbPort
+
+from ports.repositories.time_series import DbPort
 
 
 class rrdb:
@@ -31,13 +36,13 @@ class rrdb:
         pass
 
 
-class rrdb_local(timeSeriesDbPort, rrdb):
+class rrdb_local(DbPort, rrdb):
     """
     Class for interacting with a local RRDTool database (read/write mode).
-    This class implements the timeSeriesDb interface (port) for local storage
+    This class implements the DbPort interface (port) for local storage
     """
 
-    def info(self, options) -> dict:
+    def info(self, options: Any = None) -> dict:
         if not self.path:
             raise rrdb_error("path_not_set")
         return rrdtool.info(self.path)
@@ -63,10 +68,10 @@ class rrdb_local(timeSeriesDbPort, rrdb):
             raise rrdb_error("path_not_set")
 
 
-class rrdb_s3(timeSeriesDbPort, rrdb):
+class rrdb_s3(DbPort, rrdb):
     """
     Class for interacting with a RRDTool database on S3 (read only mode).
-    This class implements the timeSeriesDb interface (port) for S3 storage.
+    This class implements the DbPort interface (port) for S3 storage.
     """
 
     def info(self, options) -> dict:
