@@ -15,8 +15,7 @@ What are the use cases and problems that it solve ?
   - [Roadmap](#roadmap)
   - [Development info and details](#development-info-and-details)
     - [Hexagonal Architecture](#hexagonal-architecture)
-    - [Development environment](#development-environment)
-      - [Pre-requirements to run the application](#pre-requirements-to-run-the-application)
+    - [Development environment: Run application conatiner](#development-environment-run-application-conatiner)
 
 ## Objectives
 
@@ -34,28 +33,20 @@ What are the use cases and problems that it solve ?
 
 ![dir_tree](/docs/architecture/final_hexagonal_marked._dir_tree.png)
 
-### Development environment
+### Development environment: Run application conatiner
 
-#### Pre-requirements to run the application
+Run all commands in the root repo directory.
 
-> *... This section needs to be improved urgently ...*
->
->**Install Pre-reqs**
->For RPM distros (Fedora/RHEL/Oracle-Linux):
->
->- Development Tools group packages, perl-CPAN, pango-devel, libxml2-devel, rrdtool-devel
->
->*Please, see the **Dockerfile** for some glues on APT distros.*
->
->Create (or use) one python virtual environment.
->Install python requirimets (inside root repo directory):
+>**Build container image (docker or podman):**
 
-    pip install -r requirements.txt
+    podman build . -t ipyfix/web
 
-*inside root repo directory, run:*
+>**Run container (docker or podman):**
 
-    python src/cmd/main.py
+    podman run -d --name ipyfix-web-dev -p 8001:8000 ipyfix/web
 
+![container](/docs/architecture/container.png)
+___
 ***Basic test 1:***
 
 The web-api adapter, the web-server startup (asyncio app "entry" loop) and main are tested.
