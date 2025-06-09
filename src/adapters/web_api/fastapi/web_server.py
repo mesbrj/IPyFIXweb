@@ -16,5 +16,4 @@ async def start_web_server():
             port=8000
         )
     )
-
     await server.serve()
