@@ -1,7 +1,7 @@
 '''
 This Adapter module is a controllers (FastApi) for the time-series analyses. This module will interact with the input ports/interfaces and are completely decoupled from the use cases and related business logic.
 '''
-
+from fastapi import HTTPException
 from ports.input.analysis import analysisService
 
 def get_time_series_info(uuid: str):
@@ -12,4 +12,9 @@ def get_time_series_info(uuid: str):
         info = analysisService(type="time-series").instance_info(ts_id=instance_ts_id)
         return info
     else:
-        return {"error": "Time series instance not found", "uuid": uuid}
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "Time series instance not found",
+                "uuid": uuid
+            })

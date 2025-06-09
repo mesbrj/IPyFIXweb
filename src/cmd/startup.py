@@ -4,14 +4,13 @@ from adapters.web_api.fastapi.web_server import start_web_server
 
 async def startup_async():
     """
-    Start assynchronous web server: uvicorn + FastApi
+    Start asynchronous web server: uvicorn + FastApi
     """
     await start_web_server()
 
 def startup_sync():
     """
-    Start synchronous web server: gunicorn + Flask
-    Some times your code can be fast enough to run in a synchronous manner.
+    Start synchronous web server: gunicorn + Flask (default sync)
     """
     import sys
     import logging

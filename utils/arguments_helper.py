@@ -4,7 +4,7 @@ General Argument Helper Utilities
 
 def type_check(*expected_types):
     """
-    Decorator to check (in a simple way) the types of arguments passed to a function or methods at runtime.
+    Decorator to check the types of arguments passed to a function or methods at runtime.
     The types needs to be specified in the order of the arguments defined in the function/method signature.
     :param expected_types: Expected types for the arguments.
     :return: Decorated function with type checking.
