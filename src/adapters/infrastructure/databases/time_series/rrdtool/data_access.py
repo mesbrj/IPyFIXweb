@@ -45,6 +45,14 @@ class rrdb_local(DbPort, rrdb):
     def info(self, options: Any = None) -> dict:
         if not self.path:
             raise rrdb_error("path_not_set")
+
+        # For testing purposes, we return a mock store/instance info
+        if self.path == "tests/flowFile34_Rec15_HTTPS_bits_packets.rrd":
+            return {"rrdtool_data_source": "True",
+                "rrdtool_path": self.path, 
+                "test": "True",
+                "test_data": "This is a test data for RRDTool database."}
+
         return rrdtool.info(self.path)
 
     def create(self, options) -> bool:

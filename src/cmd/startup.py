@@ -22,7 +22,11 @@ def startup_sync():
     logging.warning(msg)
     sys.exit(1)
 
-def webframework_startup(framework="fastapi"):
+def webframework_startup(framework: str = "fastapi"):
+    '''
+    Only one web framework can be started at a time.
+    :param framework: The web framework to use.
+    '''
     if framework == "fastapi":
         asyncio.run(startup_async())
     elif framework == "flask":

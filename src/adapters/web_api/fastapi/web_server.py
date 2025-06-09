@@ -4,6 +4,7 @@ import uvicorn
 from adapters.web_api.fastapi.routes import test_router
 
 web_server = FastAPI()
+
 web_server.include_router(test_router, prefix="/api/v1/test", tags=["test"])
 
 async def start_web_server():
