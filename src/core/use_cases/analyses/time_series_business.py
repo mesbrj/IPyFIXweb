@@ -1,5 +1,5 @@
 '''
-This module implements the use cases for the time-series analyses business logic.
+This module implements the use cases for the time-series analyses business logic. This module will interact with the repositories ports/interfaces and are completely decoupled from the infrastructure and related adapters.
 '''
 
 from typing import Any
@@ -14,7 +14,7 @@ class timeSeries:
                 self._ts_db = timeSeriesDb(ts_id=self._ts_id)
             except Exception as error:
                 raise Exception(
-                    "Failed to initialize time-series database. "
+                    "Unknown error occurred while accessing and or connecting the time-series database. "
                     f"ts_id '{ts_id}': {error}"
                 ) from error
         else:

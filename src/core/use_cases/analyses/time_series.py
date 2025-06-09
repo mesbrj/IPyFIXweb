@@ -1,6 +1,6 @@
 '''
-Analyses Services
-This module provides an implementation of the interfaces:
+Time-Series Analyses Service
+This module provides an implementation of the interface:
 "ports.input.analysis.timeSeriesPort"
 '''
 
@@ -10,8 +10,8 @@ from core.use_cases.analyses.time_series_business import timeSeries as ts_analys
 
 class service(timeSeriesPort):
     """
-        Service class for time series analyses,
-        implementing the timeSeriesPort interface.
+    Service class for time series analyses,
+    implementing the timeSeriesPort interface.
     """
 
     def instance_info(self, ts_id: Any = None):

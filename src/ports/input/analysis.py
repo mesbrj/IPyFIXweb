@@ -7,8 +7,16 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 class timeSeriesPort(ABC):
+    """
+    Abstract base class for time series analysis services.
+    This class defines the interface for performing time series analyses and queries.
+    """
     @abstractmethod
     def instance_info(self, ts_id: Any = None):
+        '''
+        Retrieve information about a specific time series instance.
+        :param ts_id: Identifier for the time series instance.
+        '''
         ...
 
 
@@ -26,7 +34,7 @@ def analysisService(type: str = "time-series") -> ipfixPort | pcapPort | timeSer
     """
     Factory function to create an instance of analysisService.
     :param type: Type of analysis service to create. Default is "time-series".
-    Other options can be added in the future.
+    Other options will be added in the future.
     :return: An instance of the specified analysis service type.
     """
     if type == "time-series":
