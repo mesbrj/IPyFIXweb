@@ -1,6 +1,6 @@
 
 import asyncio
-from adapters.web_api.web_server import start_web_server
+from adapters.web_api.fastapi.web_server import start_web_server
 
 async def startup_async():
     """
@@ -11,6 +11,7 @@ async def startup_async():
 def startup_sync():
     """
     Start synchronous web server: gunicorn + Flask
+    Some times your code can be fast enough to run in a synchronous manner.
     """
     import sys
     import logging
