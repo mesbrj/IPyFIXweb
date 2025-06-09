@@ -3,14 +3,9 @@ sys.path.append(
     os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))
 )
-import asyncio
-from startup import startup as start_web_server
+from startup import webframework_startup
 
-async def main():
-    """
-    Main entry point for the application.
-    """
-    await start_web_server()
+webframework = "fastapi" # From config or cli
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    webframework_startup(webframework)
