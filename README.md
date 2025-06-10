@@ -1,23 +1,20 @@
-# IPyFIXweb - Modern network analyser (IPFIX and PCAP compatible)
+# IPyFIXweb - Network Analyser (IPFIX and PCAP compatible)
 
-What is IPyFIXweb ? What are the components and how they work ?
-...
-...
+What is IPyFIXweb ?
 What are the use cases and problems that it solve ?
-...
-...
+What are the components and how they work ?
 
-## Summary
-
-- [IPyFIXweb - Modern network analyser (IPFIX and PCAP compatible)](#ipyfixweb---modern-network-analyser-ipfix-and-pcap-compatible)
-  - [Summary](#summary)
+- [IPyFIXweb - Network Analyser (IPFIX and PCAP compatible)](#ipyfixweb---network-analyser-ipfix-and-pcap-compatible)
   - [Objectives](#objectives)
+  - [Working Features](#working-features)
   - [Roadmap](#roadmap)
   - [Development info and details](#development-info-and-details)
     - [Hexagonal Architecture](#hexagonal-architecture)
     - [Development environment: Run application conatiner](#development-environment-run-application-conatiner)
 
 ## Objectives
+
+## Working Features
 
 ## Roadmap
 

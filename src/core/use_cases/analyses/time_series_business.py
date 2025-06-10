@@ -10,13 +10,7 @@ class timeSeries:
     def __init__(self, ts_id: Any):
         if ts_id:
             self._ts_id = ts_id
-            try:
-                self._ts_db = timeSeriesDb(ts_id=self._ts_id)
-            except Exception as error:
-                raise Exception(
-                    "Unknown error occurred while accessing and or connecting the time-series database. "
-                    f"ts_id '{ts_id}': {error}"
-                ) from error
+            self._ts_db = timeSeriesDb(ts_id=self._ts_id)
         else:
             raise ValueError(
                 "ts_id must be provided to identify the time-series instance."
