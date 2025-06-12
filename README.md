@@ -38,11 +38,13 @@ Run all commands in the root repo directory.
 
     podman build . -t ipyfix/web
 
+![container_size](/docs/image_size.png)
+
 >**Run container (docker or podman):**
 
     podman run -d --name ipyfix-web-dev -p 8001:8000 ipyfix/web
 
-![container](/docs/architecture/container.png)
+![container](/docs/container.png)
 ___
 ***Basic test 1:***
 
