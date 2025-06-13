@@ -11,4 +11,4 @@
 ---
 **More info:**
 
-* [*Core c libs build*](../c_builds/README.md)
+* [*Project/App c libs build*](../c_builds/README.md)
