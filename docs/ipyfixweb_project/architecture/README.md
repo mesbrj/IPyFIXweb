@@ -1,4 +1,6 @@
-# Hexagonal Architecture
+# Development info and details
+
+## Hexagonal Architecture
 
 >**Diagram**
 

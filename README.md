@@ -31,6 +31,6 @@ What are the components and how they work ?
 
 ---
 
-* [*Basic Examples*](/docs/ipyfixweb_project/examples/README.md)
+* [*Basic Examples*](/docs/examples/README.md)
 
 * [*Development info and details*](/docs/ipyfixweb_project/architecture/README.md)

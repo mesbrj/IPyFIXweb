@@ -7,10 +7,12 @@ Dependences with container base image (python slim):
 >* openssl/crypto lib (of the base image).
 >> Because of it, libs like zlib are builded in this process.
 
-[The Dockerfile](../../../Dockerfile) is used to build and install the *tarballs* (source codes of libraries). The [pkg-config](https://people.freedesktop.org/~dbn/pkg-config-guide.html) is used to help correct compile and link the all libraries builded from source. The prefix install of all builds is: **/opt/**
+[The Dockerfile](../../../Dockerfile) is used to build and install the C libraries (source codes) from *tarballs* or *repos*. The [pkg-config](https://people.freedesktop.org/~dbn/pkg-config-guide.html) is used to help correct compile and link the libraries builded from source. The prefix install of all builds is: **/opt**
 
 **Current C libs builded**
+
 */opt/lib/pkgconfig/* - Metadata:
+
 ![C Deps](../images/dependencies.png)
 
 *References:*
