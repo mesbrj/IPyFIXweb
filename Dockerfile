@@ -1,6 +1,16 @@
 # Confiigure/compiling/installing RRDtool, IPFIX, libpcap and dependencies
 FROM python:3.12-slim AS BuildStage
 
+RUN if [ ! -d "/usr/lib/x86_64-linux-gnu/pkgconfig" ]; then \
+        echo "No pkgconfig in base image"; fi \
+&& apt-get update && apt-get upgrade -y && apt-get install -y \
+curl gcc perl make gperf gettext python3 python3-pip flex bison \
+python3-setuptools python3-wheel ninja-build git groff-base \
+&& pip install meson && pip install packaging && pip install setuptools \
+&& if [ -d "/usr/lib/x86_64-linux-gnu/pkgconfig" ]; then \
+        rm -frv /usr/lib/x86_64-linux-gnu/pkgconfig; \
+        echo "Removed the default pkgconfig of base image"; fi
+
 ENV PATH=/opt/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV PKG_CONFIG_PATH=/opt/lib/pkgconfig
 ENV PKG_CONFIG=/opt/bin/pkg-config
@@ -8,12 +18,6 @@ ENV C_INCLUDE_PATH=/opt/include
 ENV CPATH=/opt/include
 ENV LD_LIBRARY_PATH=/opt/lib
 ENV LDFLAGS=-L/opt/lib
-
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-curl gcc perl make gperf gettext python3 python3-pip flex bison \
-python3-setuptools python3-wheel ninja-build git groff-base \
-&& pip install meson && pip install packaging && pip install setuptools \
-&& rm -frv /usr/lib/x86_64-linux-gnu/pkgconfig
 
 ## configure/compiling/install pkgconfig to /opt
 ## https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
@@ -181,8 +185,7 @@ COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/src/pyfixbuf /usr
 COPY . /app
 WORKDIR /app
 
-RUN apt-get update && apt-get upgrade -y \
-&& pip install --no-cache-dir -r requirements.txt \
+RUN pip install --no-cache-dir -r requirements.txt \
 && useradd ipyfix \
 && mkdir -p /var/ipyfix/service \
 && mkdir -p /var/ipyfix/admin \
