@@ -190,9 +190,10 @@ RUN pip install --no-cache-dir -r requirements.txt \
 && mkdir -p /var/ipyfix/service \
 && mkdir -p /var/ipyfix/admin \
 && mkdir -p /var/ipyfix/tenants \
+&& ln -s src/cmd/main.py ./ipyfixweb && chmod 755 ./ipyfixweb \
 && chown -R ipyfix: /app /var/ipyfix \
 && pip freeze
 
 USER ipyfix
 
-ENTRYPOINT ["python", "src/cmd/main.py"]
+ENTRYPOINT ["ipyfixweb"]

@@ -1,6 +1,6 @@
 ***Basic test 1:***
 
-The web-api adapter, the web-server startup (asyncio app "entry" loop) and main are tested.
+The main, the web-api adapter, the web-server startup (asyncio loop) are tested.
 
     http://localhost:8000/api/v1/test/health
 
