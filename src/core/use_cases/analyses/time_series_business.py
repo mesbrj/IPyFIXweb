@@ -7,22 +7,22 @@ from ports.repositories.time_series import timeSeriesDb
 
 
 class timeSeries:
-    def __init__(self, ts_id: Any):
-        if ts_id:
-            self._ts_id = ts_id
-            self._ts_db = timeSeriesDb(ts_id=self._ts_id)
+    def __init__(self, ts_uuid: Any):
+        if ts_uuid:
+            self._ts_uuid = ts_uuid
+            self._ts_db = timeSeriesDb(ts_uuid=self._ts_uuid)
         else:
             raise ValueError(
-                "ts_id must be provided to identify the time-series instance."
+                "ts_uuid must be provided to identify the time-series instance."
             )
     @property
-    def ts_id(self):
-        return self._ts_id
-    @ts_id.setter
-    def ts_id(self):
+    def ts_uuid(self):
+        return self._ts_uuid
+    @ts_uuid.setter
+    def ts_uuid(self, value: Any):
         pass
-    @ts_id.deleter
-    def ts_id(self):
+    @ts_uuid.deleter
+    def ts_uuid(self):
         pass
     @property
     def ts_db(self):

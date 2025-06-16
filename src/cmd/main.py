@@ -1,5 +1,3 @@
-#!/usr/local/bin/python
-
 import sys, os
 src_dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 project_dir_path = os.path.dirname(src_dir_path)

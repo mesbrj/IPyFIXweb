@@ -4,8 +4,8 @@ import uvicorn
 
 from adapters.web_api.fastapi.routes import test_router
 
-web_server = FastAPI()
-web_server.include_router(
+web_app = FastAPI()
+web_app.include_router(
     test_router, prefix="/api/v1/test", tags=["test"]
 )
 
@@ -21,7 +21,7 @@ def async_multi_worker_web_server(workers: int = 2, reload: bool = False):
             "Setting workers to 1."
         )
     uvicorn.run(
-        "adapters.web_api.fastapi.web_server:web_server",
+        "adapters.web_api.fastapi.web_server:web_app",
         host="0.0.0.0",
         port=8000,
         workers=workers if not reload else 1,
@@ -32,7 +32,7 @@ def async_multi_worker_web_server(workers: int = 2, reload: bool = False):
 async def async_single_worker_web_server():
     server = uvicorn.Server(
         uvicorn.Config(
-            web_server,
+            web_app,
             host="0.0.0.0",
             port=8000,
             lifespan="on",

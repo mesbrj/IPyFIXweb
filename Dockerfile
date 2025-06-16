@@ -9,7 +9,7 @@ python3-setuptools python3-wheel ninja-build git groff-base \
 && pip install meson && pip install packaging && pip install setuptools \
 && if [ -d "/usr/lib/x86_64-linux-gnu/pkgconfig" ]; then \
         rm -frv /usr/lib/x86_64-linux-gnu/pkgconfig; \
-        echo "Removed the default pkgconfig of base image"; fi
+        echo "Removed the default pkgconfig metadata of base image"; fi
 
 ENV PATH=/opt/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV PKG_CONFIG_PATH=/opt/lib/pkgconfig
@@ -188,12 +188,11 @@ WORKDIR /app
 RUN pip install --no-cache-dir -r requirements.txt \
 && useradd ipyfix \
 && mkdir -p /var/ipyfix/service \
-&& mkdir -p /var/ipyfix/admin \
-&& mkdir -p /var/ipyfix/tenants \
-&& ln -s src/cmd/main.py ./ipyfixweb && chmod 755 ./ipyfixweb \
+&& mkdir /var/ipyfix/admin \
+&& mkdir /var/ipyfix/tenants \
 && chown -R ipyfix: /app /var/ipyfix \
 && pip freeze
 
 USER ipyfix
 
-ENTRYPOINT ["ipyfixweb"]
+ENTRYPOINT ["python", "src/cmd/main.py"]

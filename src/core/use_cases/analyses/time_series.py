@@ -14,9 +14,9 @@ class service(timeSeriesPort):
     implementing the timeSeriesPort interface.
     """
 
-    def instance_info(self, ts_id: Any = None):
-        if ts_id:
-            return ts_analyses(ts_id).store_info()
+    def instance_info(self, ts_uuid: Any = None):
+        if ts_uuid:
+            return ts_analyses(ts_uuid).store_info()
 
 
 

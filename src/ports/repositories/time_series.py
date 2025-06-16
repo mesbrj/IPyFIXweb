@@ -69,21 +69,18 @@ class DbPort(ABC):
 
 def timeSeriesDb(
         db_type: str = "rrd",
-        ts_id: Any = None,
+        ts_uuid: Any = None,
         storage: str = None
     ) -> DbPort:
     """
     Factory function to get the appropriate time series database instance.
-    At this moment only RRDTool is supported, but this function can be extended to support other timeseries.
-    
-    The ts_id argument is used to identify the specific time series instance. Now only RRDTool is supported and this argument value is a string path (formats: fs, s3) to the RRDTool database file. If InfluxDB is added, this argument value will be the Bucket-ID (and Org-ID if needed).
-    
-    The supported RRDTool values to the storage argument are:
+    at this moment only RRDTool is supported, but this function can be extended to support other timeseries (InfluxDB for example), to working together or defining one at startup. The supported RRDTool values to the storage argument are:
+
     - 'local': stored on the local filesystem (read/write mode).
     - 's3': stored on S3 (read only mode).
 
     :param db_type: Type of the database (default is 'rrd').
-    :param ts_id: Identifier for the time series instance.
+    :param ts_uuid: Identifier for the time series instance.
     :param storage: Type of the storage ('s3', 'local').
     :return: Instance of the specified time series database.
     """
@@ -91,14 +88,14 @@ def timeSeriesDb(
         rrdb_s3,
         rrdb_local,
     )
-    if not ts_id:
-        raise ValueError("ts_id must be provided to identify the time-series instance.")
+    if not ts_uuid:
+        raise ValueError("ts_uuid must be provided to identify the time-series instance.")
     if db_type != "rrd":
         raise ValueError(f"Unknown time-series DB type: {db_type}")
     if storage == 'local' or storage == None:
-        return rrdb_local(ts_id)
+        return rrdb_local(ts_uuid=ts_uuid)
     elif storage == 's3':
-        return rrdb_s3(ts_id)
+        return rrdb_s3(ts_uuid=ts_uuid)
     else:
         raise ValueError(
             f"Unknown storage type: {storage}. "
