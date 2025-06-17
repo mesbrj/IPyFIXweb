@@ -66,7 +66,7 @@ class rrdb:
             if await entry.is_dir():
                 async with AIOFile(f"{entry}/rrd_meta", 'r') as f:
                     async for line in LineReader(f):
-                        if self._ts_uuid in line:
+                        if ":" in line and self._ts_uuid == line.split(":")[1].strip():
                             self._rrd_local_instance = f"{entry}/"
                             self._rrd_ts_service_instance_uuid = self._ts_uuid
                             break

@@ -7,7 +7,6 @@ from ports.input.analysis import analysisService
 async def get_time_series_info(uuid: str):
     time_series_info = await analysisService(type="time-series").instance_info(ts_uuid=uuid)
     if time_series_info:
-        print(time_series_info)
         return time_series_info
     else:
         raise HTTPException(
