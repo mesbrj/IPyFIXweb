@@ -4,9 +4,10 @@ This Adapter module is a controllers (FastApi) for the time-series analyses. Thi
 from fastapi import HTTPException
 from ports.input.analysis import analysisService
 
-def get_time_series_info(uuid: str):
-    time_series_info = analysisService(type="time-series").instance_info(ts_uuid=uuid)
+async def get_time_series_info(uuid: str):
+    time_series_info = await analysisService(type="time-series").instance_info(ts_uuid=uuid)
     if time_series_info:
+        print(time_series_info)
         return time_series_info
     else:
         raise HTTPException(

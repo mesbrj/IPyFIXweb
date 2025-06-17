@@ -21,7 +21,7 @@ What are the components and how they work ?
 
     podman build . -t ipyfix/web
 
-![container_size](/docs/ipyfixweb_project/images/image_size.png)
+![container_size](/docs/ipyfixweb_project/images/build_image.png)
 
 >**Run container (docker or podman):**
 
