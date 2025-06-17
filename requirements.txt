@@ -1,2 +1,4 @@
+aiofile==3.9.0 ; python_version >= "3.11" and python_version < "4.0"
+aiopath==0.7.7 ; python_version > "3.11" and python_version < "4.0"
 fastapi==0.115.12 ; python_version >= "3.11" and python_version < "4.0"
 uvicorn==0.34.2 ; python_version >= "3.11" and python_version < "4.0"
