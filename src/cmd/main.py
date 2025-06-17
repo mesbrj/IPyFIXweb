@@ -8,8 +8,8 @@ from startup import webframework_startup
 
 # From config or app cli arguments
 webframework = "fastapi"
-workers = 6
-reload_support = True
+workers = 4
+reload_support = False
 
 if __name__ == "__main__":
     webframework_startup(webframework, workers, reload_support)
