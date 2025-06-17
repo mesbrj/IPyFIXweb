@@ -27,7 +27,7 @@ What are the components and how they work ?
 
     podman run -d --name ipyfix-web-dev -p 8001:8000 ipyfix/web
 
-![container](/docs/ipyfixweb_project/images/container.png)
+![container](/docs/ipyfixweb_project/images/app_container.png)
 
 ---
 
