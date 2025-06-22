@@ -104,22 +104,20 @@ class rrdb_local(DbPort, rrdb):
         for measurement in measurements_list:
             uuid = measurement.split(",")[1].split(":")[1]
             ts_instance_info["measurements_list"].append(uuid)
-            measurement_data = {f"{uuid}": {
+            measurement_data = {}
+            measurement_data = {
+                "uuid": uuid,
                 "tags": [],
                 "fields": {},
                 "data_sources_info": [],
-                "ids": {}
-            }}
+            }
             for entry in measurement.split(","):
                 if ":" in entry:
                     if not re.match(r"^.*_(id|uuid)", entry):
                         key, value = entry.split(":")
-                        measurement_data[uuid]["fields"][key] = value
-                    else:
-                        key, value = entry.split(":")
-                        measurement_data[uuid]["ids"][key] = value
+                        measurement_data["fields"][key] = value
                 else:
-                    measurement_data[uuid]["tags"].append(entry)
+                    measurement_data["tags"].append(entry)
 
             for key, value in rrdtool.info(
                 f"{self.local_instance}{measurement.split(',')[0].split(':')[1]}.rrd").items():
@@ -127,34 +125,34 @@ class rrdb_local(DbPort, rrdb):
                 rra_info = re.match(r"^rra\[(?P<rra_index>\d+)\].cf$", key)
                 if ds_name and value == 0:
                     ds_index = value
-                    measurement_data[uuid]["data_sources_info"].append([])
-                    measurement_data[uuid]["data_sources_info"][ds_index].append(ds_name.group("ds_name"))
+                    measurement_data["data_sources_info"].append(())
+                    measurement_data["data_sources_info"][ds_index] += (ds_name.group("ds_name"),)
                 elif ds_name and value != 0:
                     ds_index = value
-                    measurement_data[uuid]["data_sources_info"].append([])
-                    measurement_data[uuid]["data_sources_info"][ds_index].append(ds_name.group("ds_name"))
+                    measurement_data["data_sources_info"].append(())
+                    measurement_data["data_sources_info"][ds_index] += (ds_name.group("ds_name"),)
                 elif re.match(r"^ds\[.*\].type$", key):
-                    measurement_data[uuid]["data_sources_info"][ds_index].append(value)
+                    measurement_data["data_sources_info"][ds_index] += (value,)
                 elif re.match(r"^ds\[.*\].minimal_heartbeat$", key):
-                    measurement_data[uuid]["data_sources_info"][ds_index].append(str(value))
+                    measurement_data["data_sources_info"][ds_index] += (value,)
                 elif rra_info and rra_info.group("rra_index") == "0":
                     rra_index = ds_index + 1
-                    measurement_data[uuid]["data_sources_info"].append([])
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(value)
+                    measurement_data["data_sources_info"].append(())
+                    measurement_data["data_sources_info"][rra_index] += (value,)
                 elif rra_info and rra_info.group("rra_index") != "0":
                     rra_index = ds_index + 1
-                    measurement_data[uuid]["data_sources_info"].append([])
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(value)
+                    measurement_data["data_sources_info"].append(())
+                    measurement_data["data_sources_info"][rra_index] += (value,)
                 elif re.match(r"^rra\[\d+\].pdp_per_row$", key):
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(str(value))
+                    measurement_data["data_sources_info"][rra_index] += (value,)
                 elif re.match(r"^rra\[\d+\].rows$", key):
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(str(value))
+                    measurement_data["data_sources_info"][rra_index] += (value,)
                 elif re.match(r"^rra\[\d+\].cur_row$", key):
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(str(value))
+                    measurement_data["data_sources_info"][rra_index] += (value,)
                 elif re.match(r"^rra\[\d+\].xff$", key):
-                    measurement_data[uuid]["data_sources_info"][rra_index].append(str(value))
+                    measurement_data["data_sources_info"][rra_index] += (value,)
 
-            ts_instance_info["measurements"].append(measurement_data[uuid])
+            ts_instance_info["measurements"].append(measurement_data)
         return ts_instance_info
 
     def create(self, options) -> bool:

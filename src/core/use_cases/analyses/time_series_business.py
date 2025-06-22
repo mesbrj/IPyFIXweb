@@ -3,7 +3,9 @@ This module implements the use cases for the time-series analyses business logic
 '''
 
 from typing import Any
+
 from ports.repositories.time_series import timeSeriesDb
+from core.entities.time_series import Instance
 
 
 class timeSeries:
@@ -34,5 +36,8 @@ class timeSeries:
     def ts_db(self):
         pass
 
-    def store_info(self):
-        return self._ts_db.info()
+    async def store_info(self):
+        info = await self._ts_db.info()
+        if not info:
+            return None
+        return Instance(**info).model_dump()
