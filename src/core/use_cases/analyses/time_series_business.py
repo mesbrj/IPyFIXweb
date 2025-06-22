@@ -40,4 +40,4 @@ class timeSeries:
         info = await self._ts_db.info()
         if not info:
             return None
-        return Instance(**info).model_dump()
+        return Instance(**info).model_dump(mode="json")
