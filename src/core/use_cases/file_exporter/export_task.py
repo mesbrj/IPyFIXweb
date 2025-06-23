@@ -1,35 +1,30 @@
-import multiprocessing as parallel
+import asyncio
+from multiprocessing import Process, Queue
+from concurrent.futures import ProcessPoolExecutor
 
-from core.use_cases.file_exporter.queue_subsys import get_subsystem as queue_subsys
+from core.use_cases.file_exporter.shared_memory_mgmt import get_shared_memory_list
 
+process_executor = ProcessPoolExecutor()
 
 class ExportService:
     def __init__(self, pcap_files: list[str], output_ipfix_file: str, **kwargs):
         self.pcap_files = pcap_files
         self.ipfix_file = output_ipfix_file
         self.tasks_definitions = kwargs
-        self.shared_list = queue_subsys().get_instance()
-        self.shared_task_queue = parallel.Queue()
-        self.shared_status_queue = parallel.Queue()
+        self.shared_task_queue = Queue()
+        self.shared_status_queue = Queue()
 
-def execute_export_task(export_service: ExportService):
-    
-    with export_service.shared_list.tasks_lock:
-        ...
 
-def export_task():
+async def execute_export_task(export_service: ExportService):
+    future = process_executor.submit(export_task, export_service)
+    result = await asyncio.wrap_future(future)
+    process_executor.shutdown(wait=True)
+    return result
+
+
+def export_task(export_service: ExportService):
     """
     Run the export task using multiprocessing.
     """
-    process = parallel.Process(target=execute_export_task, args=(ExportService(
-        pcap_files=["example1.pcap", "example2.pcap"],
-        output_ipfix_file="output.ipfix",
-        task_id="1234567890abcdef1234567890abcdef",
-        epoch_timestamp="1700000000.000000",
-        status="pending"
-    ),))
-    process.start()
     ...
-    process.join()
-    
-    return process.exitcode
+
