@@ -2,6 +2,55 @@ from pydantic import BaseModel, validate_call
 
 from multiprocessing import Lock
 from multiprocessing.managers import SharedMemoryManager
+from concurrent.futures import ProcessPoolExecutor
+
+from core.entities.file_exporter_task import FileExporterTask
+
+class _ProcPool:
+    _instance = None
+    @validate_call
+    def __init__(self):
+        if _ProcPool._instance is None:
+            self._executor = ProcessPoolExecutor()
+            _ProcPool._instance = self
+        elif isinstance(_ProcPool._instance, _ProcPool):
+            raise RuntimeWarning(
+                "ProcessPoolExecutor already initialized. Use get_instance() to access it "
+                "or proc_pool_release() to release it."
+            )
+    @property
+    def _instance(self):
+        return _ProcPool._instance
+    @_instance.setter
+    def _instance(self):
+        pass
+    @_instance.deleter
+    def _instance(self):
+        pass
+
+    @property
+    def executor(self):
+        return self._executor
+    @executor.setter
+    def executor(self):
+        pass
+    @executor.deleter
+    def executor(self):
+        pass
+
+    @classmethod
+    def get_instance(cls) -> '_ProcPool':
+        if cls._instance is not None and isinstance(cls._instance, _ProcPool):
+            return cls._instance
+        else:
+            raise RuntimeWarning("ProcessPoolExecutor not initialized.")
+
+    def proc_pool_release(self) -> None:
+        if self._instance is not None and isinstance(self._instance, _ProcPool):
+            self._executor.shutdown(wait=True)
+            self._executor = None
+            _ProcPool._instance = None
+
 
 
 class _SharedMemoryList:
@@ -92,8 +141,16 @@ class _SharedMemoryList:
             self._max_items = None
             _SharedMemoryList._instance = None
 
+
+proc_pool_exec = _ProcPool()
+current_tasks_list = _SharedMemoryList(
+    value_model=FileExporterTask(),
+    max_items=10
+)
+
 @validate_call
-def get_shared_memory_list(value_model: BaseModel, max_items: int) -> _SharedMemoryList:
-    return _SharedMemoryList(
-        value_model=value_model, max_items=max_items
-    ).get_instance()
+def simultaneous_tasks_list(value_model: BaseModel, max_items: int) -> _SharedMemoryList:
+    return current_tasks_list.get_instance()
+
+def proc_pool() -> _ProcPool:
+    return proc_pool_exec.get_instance()

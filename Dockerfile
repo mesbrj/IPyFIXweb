@@ -1,5 +1,5 @@
 # Confiigure/compiling/installing RRDtool, IPFIX, libpcap and dependencies
-FROM python:3.12-slim AS BuildStage
+FROM python:3.13-slim AS BuildStage
 
 RUN if [ ! -d "/usr/lib/x86_64-linux-gnu/pkgconfig" ]; then \
         echo "No pkgconfig in base image"; fi \
@@ -168,19 +168,19 @@ RUN mkdir -p /ipyfix_build/yaf && cd /ipyfix_build/yaf \
 ## Final Stage. Finish installation: Copies (layers, repo files),
 ## install python packages (requirements.txt) and run.
 
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 ENV PYTHONUNBUFFERED=1
 ENV PATH=/opt/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV LD_LIBRARY_PATH=/opt/lib
 
 COPY --from=BuildStage /opt /opt
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/rrdtool /usr/local/lib/python3.12/site-packages/rrdtool
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/rrdtool_bindings-0.3.1.dist-info /usr/local/lib/python3.12/site-packages/rrdtool_bindings-0.3.1.dist-info
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/rrdtool.cpython-312-x86_64-linux-gnu.so /usr/local/lib/python3.12/site-packages/rrdtool.cpython-312-x86_64-linux-gnu.so
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/pyfixbuf /usr/local/lib/python3.12/site-packages/pyfixbuf
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/pyfixbuf-0.9.0-py3.12.egg-info /usr/local/lib/python3.12/site-packages/pyfixbuf-0.9.0-py3.12.egg-info
-COPY --from=BuildStage /usr/local/lib/python3.12/site-packages/src/pyfixbuf /usr/local/lib/python3.12/site-packages/src/pyfixbuf
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/rrdtool /usr/local/lib/python3.13/site-packages/rrdtool
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/rrdtool_bindings-0.3.1.dist-info /usr/local/lib/python3.13/site-packages/rrdtool_bindings-0.3.1.dist-info
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/rrdtool.cpython-313-x86_64-linux-gnu.so /usr/local/lib/python3.13/site-packages/rrdtool.cpython-313-x86_64-linux-gnu.so
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/pyfixbuf /usr/local/lib/python3.13/site-packages/pyfixbuf
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/pyfixbuf-0.9.0-py3.13.egg-info /usr/local/lib/python3.13/site-packages/pyfixbuf-0.9.0-py3.13.egg-info
+COPY --from=BuildStage /usr/local/lib/python3.13/site-packages/src/pyfixbuf /usr/local/lib/python3.13/site-packages/src/pyfixbuf
 
 COPY . /app
 WORKDIR /app
