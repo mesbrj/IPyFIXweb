@@ -1,6 +1,7 @@
 import asyncio
 
-from utils.arguments_helper import type_check
+from pydantic import validate_call
+
 from adapters.web_api.flask.web_server import (
     startup_sync_not_implemented
 )
@@ -9,7 +10,7 @@ from adapters.web_api.fastapi.web_server import (
     async_single_worker_web_server
 )
 
-@type_check(str, int | None, bool)
+@validate_call
 def webframework_startup(
     framework: str,
     workers: int | None,

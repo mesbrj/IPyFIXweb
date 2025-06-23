@@ -1,4 +1,4 @@
 service_uuid:1164a4ac-1415-4316-a455-1f8d650348b2
-rdd_id:714db67f8406f33e6dc69e8eff9f343e,measurement_uuid:afdb16a0-00db-51eb-b9ec-7d8aebd5243a,FlowsFile:34,REC:54,HTTPS,server_ip:10.1.96.15,client_ip:192.168.1.148
-rdd_id:Se39dfb5169058449f8aa457faecdc17,measurement_uuid:f30e8b1c-baea-5204-89df-069e25f039ca,FlowsFile:34,REC:624,HTTPS,server_ip:10.1.96.15,client_ip:192.168.1.72
-rdd_id:9ef377b830807cbc237a2dfe7536fc1f,measurement_uuid:sa8589cb3-724e-5102-b9b8-d57783637a70,FlowsFile:34,REC:19,SSH,server_ip:10.1.32.4,client_ip:172.16.0.25
+rdd_id:714db67f8406f33e6dc69e8eff9f343e,measurement_uuid:3fdb16a0-00db-51eb-b9ec-7d8aebd5243a,FlowsFile:34,REC:54,HTTPS,server_ip:10.1.96.15,client_ip:192.168.1.148
+rdd_id:Se39dfb5169058449f8aa457faecdc17,measurement_uuid:830e8b1c-baea-5204-89df-069e25f039ca,FlowsFile:34,REC:624,HTTPS,server_ip:10.1.96.15,client_ip:192.168.1.72
+rdd_id:9ef377b830807cbc237a2dfe7536fc1f,measurement_uuid:9a8589cb-724e-5102-b9b8-d57783637a70,FlowsFile:34,REC:19,SSH,server_ip:10.1.32.4,client_ip:172.16.0.25
