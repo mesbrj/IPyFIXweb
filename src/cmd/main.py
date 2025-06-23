@@ -7,9 +7,7 @@ sys.path.append(project_dir_path)
 from startup import webframework_startup
 
 # From config or app cli arguments
-webframework = "fastapi"
-workers = 4
-reload_support = False
+webframework, workers, reload_support = "fastapi", 4, False
 
 if __name__ == "__main__":
     webframework_startup(webframework, workers, reload_support)

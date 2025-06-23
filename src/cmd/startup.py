@@ -2,9 +2,7 @@ import asyncio
 
 from pydantic import validate_call
 
-from adapters.web_api.flask.web_server import (
-    startup_sync_not_implemented
-)
+from adapters.web_api.flask.web_server import startup_sync_not_implemented
 from adapters.web_api.fastapi.web_server import (
     async_multi_worker_web_server,
     async_single_worker_web_server
