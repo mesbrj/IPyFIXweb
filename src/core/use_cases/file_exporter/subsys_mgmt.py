@@ -1,10 +1,12 @@
-from pydantic import BaseModel, validate_call
-
 from multiprocessing import Lock
 from multiprocessing.managers import SharedMemoryManager
 from concurrent.futures import ProcessPoolExecutor
+import pickle
+
+from pydantic import BaseModel, validate_call
 
 from core.entities.file_exporter_task import FileExporterTask
+
 
 class _ProcPool:
     _instance = None
@@ -12,22 +14,6 @@ class _ProcPool:
         if _ProcPool._instance is None:
             self._executor = ProcessPoolExecutor()
             _ProcPool._instance = self
-        elif isinstance(_ProcPool._instance, _ProcPool):
-            pass
-        else:
-            raise RuntimeError(
-                "Unexpected instance type for _ProcPool. Need improvements "
-                "and more checks (instances memory address, ..., ...)."
-            )
-    @property
-    def _instance(self):
-        return _ProcPool._instance
-    @_instance.setter
-    def _instance(self):
-        pass
-    @_instance.deleter
-    def _instance(self):
-        pass
 
     @property
     def executor(self):
@@ -40,11 +26,13 @@ class _ProcPool:
         pass
 
     @classmethod
-    def get_instance(cls, only_id: bool = False) -> '_ProcPool' | str | None:
+    def get_instance(cls, only_id: bool = False):
         if cls._instance is not None and isinstance(cls._instance, _ProcPool):
             if only_id:
                 return hex(id(cls._instance))
             return cls._instance
+        else:
+            return cls()
 
     def proc_pool_release(self) -> None:
         if self._instance is not None and isinstance(self._instance, _ProcPool):
@@ -56,33 +44,22 @@ class _ProcPool:
 class _SharedMemoryList:
     _instance = None
     @validate_call
-    def __init__(self, value_model: BaseModel, max_items: int = 2):
+    def __init__(
+        self,
+        value_model: BaseModel = FileExporterTask().model_dump(mode='python'),
+        max_items: int = 10
+        ):
         if _SharedMemoryList._instance is None:
             self._shared_memory_manager = SharedMemoryManager()
             self._shared_memory_manager.start()
             self._max_items = max_items
+            byte_serialized_data = pickle.dumps(value_model)
             self._shared_list = self._shared_memory_manager.ShareableList(
-                [value_model().model_dump(mode='python')] * self._max_items
-                )
-            self._shared_list_name = self._shared_list.name
+                [byte_serialized_data] * self._max_items
+            )
+            self._shared_list_name = self._shared_list.shm.name
             self._shared_list_lock = Lock()
             _SharedMemoryList._instance = self
-        elif isinstance(_SharedMemoryList._instance, _SharedMemoryList):
-            pass
-        else:
-            raise RuntimeError(
-                "Unexpected instance type for _SharedMemoryList. Need improvements "
-                "and more checks (instances memory address, ..., ...)."
-            )
-    @property
-    def _instance(self):
-        return _SharedMemoryList._instance
-    @_instance.setter
-    def _instance(self):
-        pass
-    @_instance.deleter
-    def _instance(self):
-        pass
 
     @property
     def shared_list(self):
@@ -125,11 +102,13 @@ class _SharedMemoryList:
         pass
 
     @classmethod
-    def get_instance(cls, only_id: bool = False) -> '_SharedMemoryList' | str | None:
+    def get_instance(cls, only_id: bool = False):
         if cls._instance is not None and isinstance(cls._instance, _SharedMemoryList):
             if only_id:
                 return hex(id(cls._instance))
             return cls._instance
+        else:
+            return cls()
 
     def instance_release(self):
         if self._instance is not None and isinstance(self._instance, _SharedMemoryList):
@@ -143,13 +122,9 @@ class _SharedMemoryList:
 
 
 proc_pool_exec = _ProcPool()
-current_tasks_list = _SharedMemoryList(
-    value_model=FileExporterTask(),
-    max_items=10
-)
+current_tasks_list = _SharedMemoryList()
 
-@validate_call
-def simultaneous_tasks_list(value_model: BaseModel, max_items: int) -> _SharedMemoryList:
+def simultaneous_tasks_list() -> _SharedMemoryList:
     return current_tasks_list.get_instance()
 
 def proc_pool() -> _ProcPool:

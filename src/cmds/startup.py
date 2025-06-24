@@ -9,7 +9,7 @@ from adapters.web_api.fastapi.web_server import (
     async_single_worker_web_server
 )
 
-def file_exporter_startup() -> None:
+def file_exporter_startup():
     return file_export_service()
 
 
@@ -17,7 +17,7 @@ def file_exporter_startup() -> None:
 def webframework_startup(
     framework: str,
     workers: int | None,
-    reload: bool = False) -> None:
+    reload: bool = False):
     '''
     Only one web framework can be started at a time.
     :param framework: The web framework to use.

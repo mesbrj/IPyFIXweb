@@ -1,18 +1,12 @@
-from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
-from cmd.shutdown import file_exporter_shutdown
+from cmds.shutdown import file_exporter_shutdown
 from adapters.web_api.fastapi.routes import test_router
 
-@asynccontextmanager
-def lifespan(web_app: FastAPI):
-    try:
-        yield
-    finally:
-        file_exporter_shutdown()
+web_app = FastAPI()
+web_app.add_event_handler("shutdown", file_exporter_shutdown)
 
-web_app = FastAPI(lifespan=lifespan)
 web_app.include_router(
     test_router, prefix="/api/v1/test", tags=["test"]
 )
