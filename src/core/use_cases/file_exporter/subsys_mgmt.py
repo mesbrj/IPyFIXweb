@@ -8,15 +8,16 @@ from core.entities.file_exporter_task import FileExporterTask
 
 class _ProcPool:
     _instance = None
-    @validate_call
     def __init__(self):
         if _ProcPool._instance is None:
             self._executor = ProcessPoolExecutor()
             _ProcPool._instance = self
         elif isinstance(_ProcPool._instance, _ProcPool):
-            raise RuntimeWarning(
-                "ProcessPoolExecutor already initialized. Use get_instance() to access it "
-                "or proc_pool_release() to release it."
+            pass
+        else:
+            raise RuntimeError(
+                "Unexpected instance type for _ProcPool. Need improvements "
+                "and more checks (instances memory address, ..., ...)."
             )
     @property
     def _instance(self):
@@ -39,11 +40,11 @@ class _ProcPool:
         pass
 
     @classmethod
-    def get_instance(cls) -> '_ProcPool':
+    def get_instance(cls, only_id: bool = False) -> '_ProcPool' | str | None:
         if cls._instance is not None and isinstance(cls._instance, _ProcPool):
+            if only_id:
+                return hex(id(cls._instance))
             return cls._instance
-        else:
-            raise RuntimeWarning("ProcessPoolExecutor not initialized.")
 
     def proc_pool_release(self) -> None:
         if self._instance is not None and isinstance(self._instance, _ProcPool):
@@ -52,11 +53,10 @@ class _ProcPool:
             _ProcPool._instance = None
 
 
-
 class _SharedMemoryList:
     _instance = None
     @validate_call
-    def __init__(self, value_model: BaseModel, max_items: int = 10):
+    def __init__(self, value_model: BaseModel, max_items: int = 2):
         if _SharedMemoryList._instance is None:
             self._shared_memory_manager = SharedMemoryManager()
             self._shared_memory_manager.start()
@@ -68,9 +68,11 @@ class _SharedMemoryList:
             self._shared_list_lock = Lock()
             _SharedMemoryList._instance = self
         elif isinstance(_SharedMemoryList._instance, _SharedMemoryList):
-            raise RuntimeWarning(
-                "SharedMemoryList already initialized. Use get_instance() to access it "
-                "or instance_release() to release it."
+            pass
+        else:
+            raise RuntimeError(
+                "Unexpected instance type for _SharedMemoryList. Need improvements "
+                "and more checks (instances memory address, ..., ...)."
             )
     @property
     def _instance(self):
@@ -128,17 +130,15 @@ class _SharedMemoryList:
             if only_id:
                 return hex(id(cls._instance))
             return cls._instance
-        else:
-            raise RuntimeWarning("SharedMemoryList not initialized.")
 
-    def instance_release(self) -> None:
+    def instance_release(self):
         if self._instance is not None and isinstance(self._instance, _SharedMemoryList):
-            self._shared_memory_manager.shutdown()
-            self._shared_memory_manager = None
             self._shared_list = None
             self._shared_list_name = None
             self._shared_list_lock = None
             self._max_items = None
+            self._shared_memory_manager.shutdown()
+            self._shared_memory_manager = None
             _SharedMemoryList._instance = None
 
 

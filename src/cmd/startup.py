@@ -2,11 +2,16 @@ import asyncio
 
 from pydantic import validate_call
 
+from core.use_cases.file_exporter.export_task import file_export_service
 from adapters.web_api.flask.web_server import startup_sync_not_implemented
 from adapters.web_api.fastapi.web_server import (
     async_multi_worker_web_server,
     async_single_worker_web_server
 )
+
+def file_exporter_startup() -> None:
+    return file_export_service()
+
 
 @validate_call
 def webframework_startup(
