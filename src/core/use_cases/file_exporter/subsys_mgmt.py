@@ -1,7 +1,7 @@
+import pickle
 from multiprocessing import Lock
 from multiprocessing.managers import SharedMemoryManager
 from concurrent.futures import ProcessPoolExecutor
-import pickle
 
 from pydantic import BaseModel, validate_call
 
@@ -124,8 +124,8 @@ class _SharedMemoryList:
 proc_pool_exec = _ProcPool()
 current_tasks_list = _SharedMemoryList()
 
-def simultaneous_tasks_list() -> _SharedMemoryList:
-    return current_tasks_list.get_instance()
-
 def proc_pool() -> _ProcPool:
     return proc_pool_exec.get_instance()
+
+def simultaneous_tasks_list() -> _SharedMemoryList:
+    return current_tasks_list.get_instance()

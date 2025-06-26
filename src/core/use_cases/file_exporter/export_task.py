@@ -3,6 +3,8 @@ from multiprocessing import Queue
 
 from core.use_cases.file_exporter.subsys_mgmt import proc_pool, simultaneous_tasks_list
 
+def file_export_service():
+    return (proc_pool(), simultaneous_tasks_list())
 
 class ExportService:
     def __init__(self, pcap_files: list[str], output_ipfix_file: str, **kwargs):
@@ -14,8 +16,9 @@ class ExportService:
         self.current_tasks = simultaneous_tasks_list()
 
 
-async def execute_export_task(*args, **kwargs):
-    task = ExportService(*args, **kwargs)
+async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **kwargs):
+
+    task = ExportService(pcap_files, output_ipfix_path, **kwargs)
 
     #with task.current_tasks.shared_list_lock:
     #    ... export_service.current_tasks.shared_list
@@ -53,9 +56,3 @@ def export_task(export_service: ExportService):
     #export_service.shared_status_queue..put('...',block=False)
     #with export_service.current_tasks.shared_list_lock:
     #    ... export_service.current_tasks.shared_list
-
-
-def file_export_service():
-    proc_pool_exec = proc_pool()
-    shared_mem_list = simultaneous_tasks_list()
-    return (proc_pool_exec, shared_mem_list)

@@ -34,7 +34,8 @@ class MeasurementDetails(BaseModel):
             raise ValueError("data_sources_info must be a list")
         for entry in v:
             if not isinstance(entry, (tuple, list)):
-                raise ValueError("data_sources_info must be a list of tuples or lists")
+                raise ValueError(
+                    "data_sources_info must be a list of tuples or list of lists")
         return v
     
 
