@@ -4,7 +4,7 @@
 
 >**Diagram**
 
-![architecture_hexagonal](/docs/ipyfixweb_project/images/hexagonal_architecture.png)
+![architecture_hexagonal](/docs/ipyfixweb_project/images/hexagonal.png)
 
 >**Repo directory tree**
 
