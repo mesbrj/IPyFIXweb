@@ -4,12 +4,10 @@ project_dir_path = os.path.dirname(src_dir_path)
 sys.path.append(src_dir_path)
 sys.path.append(project_dir_path)
 
-from startup import webframework_startup
+from startup import file_exporter_startup, webframework_startup
 
-# From config or app cli arguments
-webframework = "fastapi"
-workers = 4
-reload_support = False
+webframework, workers, reload_support = "fastapi", 4, False
 
 if __name__ == "__main__":
+    proc_pool, shared_mem = file_exporter_startup()
     webframework_startup(webframework, workers, reload_support)

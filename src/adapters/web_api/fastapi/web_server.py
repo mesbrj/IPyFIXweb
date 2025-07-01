@@ -1,15 +1,19 @@
-import logging 
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
 
+from cmds.shutdown import file_exporter_shutdown
 from adapters.web_api.fastapi.routes import test_router
 
 web_app = FastAPI()
+web_app.add_event_handler("shutdown", file_exporter_shutdown)
+
 web_app.include_router(
     test_router, prefix="/api/v1/test", tags=["test"]
 )
 
 def async_multi_worker_web_server(workers: int = 2, reload: bool = False):
+    import logging 
+    #
     if not workers:
         workers = 2
     elif workers > 4:
