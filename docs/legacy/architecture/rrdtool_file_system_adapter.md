@@ -48,7 +48,7 @@ If some future analysis against the same server/clients pair and protocol infos 
 
 # Very simple example: Create a new RRD file with two data sources, next update the two ds at same time with random values
 
-tenant_path = "tests/tenant_testID/pcap_export1"
+tenant_path = "samples/tenant_test/rrdtool"
 rrd_file_path = "9ef377b830807cbc237a2dfe7536fc1f.rrd"
 ssh_bytesDataSource = "tcp22_bytes"
 ssh_packetsDataSource = "tcp22_packets"

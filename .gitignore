@@ -1,6 +1,39 @@
 # IPyFIXweb workspace/project
 #  Local dev Jupyter Notebooks
 #  Auto Generated Backup and temp files
+#  Copilot work files
+test_heavy_load_shutdown.py
+final_shutdown_test.py
+pure_python_test.py
+high_volume_test.py
+quick_volume_test.py
+simple_volume_test.py
+stress_test_30_tasks.py
+test_comprehensive_task_mgmt.py
+test_curl_simulation.py
+test_duplicate_task_ids.py
+test_internal_shutdown.py
+test_shutdown_speed.py
+test_singleton_behavior.py
+test_multi_worker_coordination.py
+solution_summary.py
+simple_solution_summary.py
+simple_shutdown_test.py
+test_summary.py
+check_port_consistency.py
+test_multi_shutdown.py
+test_shutdown_behavior.py
+test_your_improvements.py
+multi_worker_test.py
+test_multi_server.py
+simple_multi_test.py
+cross_process_storage.py
+comprehensive_test.py
+queue_example.py
+mock_adapter.py
+start_server.py
+test_api.py
+TESTING_INSTRUCTIONS.md
 *dev_local*.ipynb
 *.drawio.bkp
 *.drawio.dtmp

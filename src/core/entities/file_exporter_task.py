@@ -1,19 +1,19 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
+from typing import List
 
-list_item = {
-    "task_id": "#" * 32,
-    "epoch_timestamp": "0" * 19 + '.',
-    "status": "_" * 10,
-    }
 class TaskSharedListItem(BaseModel):
-    task_id: str
-    epoch_timestamp: str
-    status: str
-    def __init__(self, **data):
-        data["task_id"] = data.get("task_id", list_item["task_id"])
-        data["epoch_timestamp"] = data.get("epoch_timestamp", list_item["epoch_timestamp"])
-        data["status"] = data.get("status", list_item["status"])
-        super().__init__(**data)
+    task_id: str = "#" * 32
+    epoch_timestamp: str = "0" * 19 + '.'
+    status: str = "_" * 10
 
 class CurrentTasksSharedList(BaseModel):
-    __root__: list[TaskSharedListItem]
+    RootModel: list[TaskSharedListItem]
+
+class FileExporterTask(BaseModel):
+    task_id: str = "#" * 32
+    pcap_files: List[str] = []
+    output_ipfix_file: str = "output.ipfix"
+    epoch_start_timestamp: str = "0" * 19 + '.'
+    DPI: bool = False
+    analysis_list: List[str] = []
+    status: str = "_" * 10

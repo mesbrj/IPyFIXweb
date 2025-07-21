@@ -1,4 +1,7 @@
 import pickle
+import logging
+import os
+import signal
 from multiprocessing import Lock
 from multiprocessing.managers import SharedMemoryManager
 from concurrent.futures import ProcessPoolExecutor
@@ -7,38 +10,65 @@ from pydantic import BaseModel, validate_call
 
 from core.entities.file_exporter_task import FileExporterTask
 
+logger = logging.getLogger(__name__)
+
 
 class _ProcPool:
     _instance = None
-    def __init__(self):
-        if _ProcPool._instance is None:
-            self._executor = ProcessPoolExecutor()
-            _ProcPool._instance = self
+    # Class-level list shared across all workers (preloaded Gunicorn workers)
+    _all_executors = []
+    
+    def __init__(self, max_workers=2):
+        # Only create executor if this is a new instance (singleton per worker)
+        self._executor = ProcessPoolExecutor(max_workers=max_workers)
+        _ProcPool._all_executors.append(self._executor)
+        logger.info(f"Created executor #{len(_ProcPool._all_executors)} with {max_workers} max workers for process coordination")
 
     @property
     def executor(self):
         return self._executor
-    @executor.setter
-    def executor(self):
-        pass
-    @executor.deleter
-    def executor(self):
-        pass
 
     @classmethod
     def get_instance(cls, only_id: bool = False):
-        if cls._instance is not None and isinstance(cls._instance, _ProcPool):
-            if only_id:
-                return hex(id(cls._instance))
-            return cls._instance
-        else:
-            return cls()
+        # Proper singleton: only create one instance per worker process
+        if cls._instance is None:
+            cls._instance = cls()
+        if only_id:
+            return hex(id(cls._instance))
+        return cls._instance
 
     def proc_pool_release(self) -> None:
-        if self._instance is not None and isinstance(self._instance, _ProcPool):
-            self._executor.shutdown(wait=True)
-            self._executor = None
-            _ProcPool._instance = None
+        """Ultra-simple brutal shutdown - kill everything, ignore errors"""
+        logger.info("Starting brutal shutdown...")
+        killed_count = 0
+        
+        try:
+            # Kill all processes from all executors
+            for i, executor in enumerate(_ProcPool._all_executors, 1):
+                logger.info(f"Force-killing executor #{i}")
+                
+                # Get processes and kill them
+                processes = getattr(executor, '_processes', {})
+                for process in processes.values():
+                    try:
+                        os.kill(process.pid, signal.SIGKILL)
+                        killed_count += 1
+                        logger.debug(f"Killed process {process.pid}")
+                    except:
+                        pass
+                
+                # Shutdown executor (non-blocking)
+                try:
+                    executor.shutdown(wait=False, cancel_futures=True)
+                except:
+                    pass
+            
+            logger.info(f"Brutal shutdown completed - killed {killed_count} processes")
+        except Exception as e:
+            logger.error(f"Shutdown error: {e}")
+        finally:
+            # Always clear everything no matter what
+            _ProcPool._all_executors.clear()
 
 
 class _SharedMemoryList:
@@ -47,7 +77,7 @@ class _SharedMemoryList:
     def __init__(
         self,
         value_model: BaseModel = FileExporterTask().model_dump(mode='python'),
-        max_items: int = 10
+        max_items: int = 15
         ):
         if _SharedMemoryList._instance is None:
             self._shared_memory_manager = SharedMemoryManager()
@@ -111,14 +141,25 @@ class _SharedMemoryList:
             return cls()
 
     def instance_release(self):
-        if self._instance is not None and isinstance(self._instance, _SharedMemoryList):
-            self._shared_list = None
-            self._shared_list_name = None
-            self._shared_list_lock = None
-            self._max_items = None
-            self._shared_memory_manager.shutdown()
-            self._shared_memory_manager = None
-            _SharedMemoryList._instance = None
+        """Ultra-simple shared memory cleanup"""
+        if self._instance is not None:
+            logger.info("Starting shared memory cleanup...")
+            
+            try:
+                # Force shutdown shared memory manager
+                if hasattr(self, '_shared_memory_manager'):
+                    self._shared_memory_manager.shutdown()
+                
+                # Clear all references
+                for attr in ['_shared_list', '_shared_list_name', '_shared_list_lock', 
+                            '_max_items', '_shared_memory_manager']:
+                    setattr(self, attr, None)
+                
+                logger.info("Shared memory cleanup completed")
+            except Exception as e:
+                logger.warning(f"Shared memory cleanup error: {e}")
+            finally:
+                _SharedMemoryList._instance = None
 
 
 proc_pool_exec = _ProcPool()

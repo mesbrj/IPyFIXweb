@@ -4,11 +4,11 @@
 
 >**Diagram**
 
-![architecture_hexagonal](/docs/ipyfixweb_project/images/hexagonal.png)
+![architecture_hexagonal](../images/hexagonal.png)
 
 >**Repo directory tree**
 
-![dir_tree](/docs/ipyfixweb_project/images/final_hexagonal_marked._dir_tree.png)
+![dir_tree](../images/final_hexagonal_marked._dir_tree.png)
 
 ---
 **More info:**

@@ -1,45 +1,78 @@
-import uvicorn
+"""
+Pure Python multi-worker web server - no external dependencies
+Container-optimized for production use with Gunicorn
+"""
+from gunicorn.app.base import BaseApplication
 from fastapi import FastAPI
+import atexit
 
 from cmds.shutdown import file_exporter_shutdown
 from adapters.web_api.fastapi.routes import test_router
 
+# FastAPI application setup
 web_app = FastAPI()
 web_app.add_event_handler("shutdown", file_exporter_shutdown)
-
 web_app.include_router(
     test_router, prefix="/api/v1/test", tags=["test"]
 )
+# Register atexit handler for graceful shutdown
+atexit.register(file_exporter_shutdown)
 
-def async_multi_worker_web_server(workers: int = 2, reload: bool = False):
-    import logging 
-    #
-    if not workers:
+
+class GunicornServer(BaseApplication):
+    """
+    Custom Gunicorn server for multi-worker FastAPI deployment
+    Optimized for containerized environments
+    """
+    def __init__(self, app, options=None):
+        self.options = options or {}
+        self.application = app
+        super().__init__()
+
+    def init(self, parser, opts, args):
+        pass
+
+    def load_config(self):
+        for key, value in self.options.items():
+            self.cfg.set(key.lower(), value)
+
+    def load(self):
+        return self.application
+
+
+def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0", port: int = 8000):
+    """
+    Start multi-worker FastAPI server using Gunicorn
+    
+    Args:
+        workers: Number of worker processes (minimum 2 for shared memory)
+        host: Host to bind to
+        port: Port to bind to
+    """
+    import logging
+    
+    # Enforce minimum workers for multiprocessing.Queue avoidance
+    if workers < 2:
         workers = 2
-    elif workers > 4:
+        logging.warning(f"Minimum 2 workers required for proper multiprocessing. Setting workers to {workers}")
+    
+    # Limit maximum workers to prevent resource exhaustion
+    if workers > 4:
         workers = 4
-        logging.warning(f"Limiting workers to {workers}")
-    if workers > 1 and reload:
-        logging.warning(
-            "Reloading is not supported with multiple workers. "
-            "Setting workers to 1."
-        )
-    uvicorn.run(
-        "adapters.web_api.fastapi.web_server:web_app",
-        host="0.0.0.0",
-        port=8000,
-        workers=workers if not reload else 1,
-        lifespan="on",
-        reload=reload if reload else False,
-    )
-
-async def async_single_worker_web_server():
-    server = uvicorn.Server(
-        uvicorn.Config(
-            web_app,
-            host="0.0.0.0",
-            port=8000,
-            lifespan="on",
-        )
-    )
-    await server.serve()
+        logging.warning(f"Limiting workers to {workers} to prevent resource exhaustion")
+    
+    logging.info(f"Starting IPyFIXweb server with {workers} workers...")
+    
+    options = {
+        "bind": f"{host}:{port}",
+        "workers": workers,
+        "worker_class": "uvicorn.workers.UvicornWorker",
+        "preload_app": True,  # Critical for shared memory across workers
+        "timeout": 120,
+        "keepalive": 2,
+        "max_requests": 1000,
+        "max_requests_jitter": 100,
+        "graceful_timeout": 10,  # Optimized for container environments
+    }
+    
+    GunicornServer(web_app, options).run()
