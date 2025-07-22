@@ -123,6 +123,37 @@ class TaskSlotManager:
             return counts
         
         return self._safe_op(_count) or {"running": 0, "completed": 0, "failed": 0, "empty": self.max_items}
+    
+    def force_cleanup_all_slots(self) -> int:
+        """Brute force cleanup - clean ALL slots regardless of status"""
+        def _brute_force_cleanup():
+            current_time = time.time()
+            cleaned_count = 0
+            
+            for i in range(self.max_items):
+                data = self._get_data(i)
+                if data and not data.get("task_id", "").startswith("#"):
+                    # Log all cleaned tasks
+                    try:
+                        from .task_logger import log_task_completion
+                        data_copy = data.copy()
+                        data_copy["status"] = "brute_force_cleanup"
+                        log_task_completion(data_copy, success=False)
+                    except:
+                        pass
+                    
+                    # Free the slot - no matter what status
+                    empty = {"task_id": f"#empty_slot_{i}", "status": "empty", "epoch_timestamp": str(current_time)}
+                    if self._set_data(i, empty):
+                        cleaned_count += 1
+                        logger.warning(f"Brute force cleaned slot {i} (was: {data.get('task_id', 'unknown')})")
+            
+            return cleaned_count
+        
+        result = self._safe_op(_brute_force_cleanup)
+        if result is not None and result > 0:
+            logger.info(f"Brute force cleaned {result} slots")
+        return result or 0
 
 
 def create_task_manager(shared_list, shared_lock, max_items):

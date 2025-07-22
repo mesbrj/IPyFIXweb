@@ -5,6 +5,8 @@ Container-optimized for production use with Gunicorn
 from gunicorn.app.base import BaseApplication
 from fastapi import FastAPI
 import atexit
+import signal
+import os
 
 from cmds.shutdown import file_exporter_shutdown
 from adapters.web_api.fastapi.routes import test_router
@@ -15,8 +17,28 @@ web_app.add_event_handler("shutdown", file_exporter_shutdown)
 web_app.include_router(
     test_router, prefix="/api/v1/test", tags=["test"]
 )
+
 # Register atexit handler for graceful shutdown
 atexit.register(file_exporter_shutdown)
+
+# Signal handlers for container environments
+def signal_handler(signum, frame):
+    """Handle container shutdown signals"""
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"Received signal {signum}, initiating graceful shutdown...")
+    
+    try:
+        file_exporter_shutdown()
+    except Exception as e:
+        logger.error(f"Error during signal shutdown: {e}")
+    finally:
+        # Force exit if needed
+        os._exit(0)
+
+# Register signal handlers for container environments
+signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
 
 
 class GunicornServer(BaseApplication):
@@ -72,7 +94,8 @@ def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0", port:
         "keepalive": 2,
         "max_requests": 1000,
         "max_requests_jitter": 100,
-        "graceful_timeout": 10,  # Optimized for container environments
+        "graceful_timeout": 30,  # Extended timeout for proper cleanup
+        "worker_tmp_dir": "/dev/shm",  # Use tmpfs for better performance
     }
     
     GunicornServer(web_app, options).run()

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks
 import logging
 import pickle
+import time
 
 from adapters.web_api.fastapi.controllers.time_series import get_time_series_info
 # "Hurting" the hexagonal architecture here:
