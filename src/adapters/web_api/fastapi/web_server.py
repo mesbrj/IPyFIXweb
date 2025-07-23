@@ -62,7 +62,7 @@ class GunicornServer(BaseApplication):
         return self.application
 
 
-def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0", port: int = 8000):
+async def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0", port: int = 8000):
     """
     Start multi-worker FastAPI server using Gunicorn
     
@@ -97,5 +97,4 @@ def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0", port:
         "graceful_timeout": 30,  # Extended timeout for proper cleanup
         "worker_tmp_dir": "/dev/shm",  # Use tmpfs for better performance
     }
-    
-    GunicornServer(web_app, options).run()
+    await GunicornServer(web_app, options).run()

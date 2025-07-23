@@ -36,22 +36,17 @@ def export_task(task_data: ExportTaskData):
         except Exception as e:
             logger.error(f"CRITICAL: Worker failed to connect to shared memory: {e}")
             raise Exception(f"Task cancelled - shared memory connection failed: {e}")
-        
+
         # Execute processing steps
         steps = ["Loading PCAP", "Parsing packets", "Applying DPI", "Converting IPFIX", "Writing output", "Analysis"]
-        
         for i, step in enumerate(steps, 1):
             logger.info(f"Step {i}/6: {step} - Task {task_id}")
             time.sleep(1)  # Simulate processing
-            
-            # Update status if possible (non-critical)
             if task_manager:
-                try:
-                    task_manager.update_task_status(task_id, f"step_{i}_{step.lower().replace(' ', '_')}")
-                except Exception as status_error:
-                    logger.debug(f"Status update failed (non-critical): {status_error}")
-                    # Continue processing even if status updates fail
-        
+                    if i == len(steps):
+                        task_manager.update_task_status(task_id, "completed_all_steps")
+                    else:
+                        task_manager.update_task_status(task_id, f"step_{i}_{step.lower().replace(' ', '_')}")
         # Mark task as completed and free the slot
         if task_manager:
             try:
@@ -64,7 +59,7 @@ def export_task(task_data: ExportTaskData):
         
         logger.info("Export task completed successfully")
         return {"status": "success", "output_file": task_data.ipfix_file}
-        
+
     except KeyboardInterrupt:
         # Handle process termination gracefully
         logger.warning(f"Export task {task_id} interrupted by system shutdown")

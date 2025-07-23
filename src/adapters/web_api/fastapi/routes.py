@@ -30,9 +30,10 @@ def time_series_fetch(ts_service_uuid: str, measurement_uuid: str, start: int = 
 async def file_exporter_export_task(background_tasks: BackgroundTasks):
     
     # Generate unique task ID for each request (not hardcoded!)
+    import os
     import uuid
     import time
-    task_id = f"api_task_{int(time.time())}_{str(uuid.uuid4())[:8]}"
+    task_id = f"api_task_{os.getpid()}_{str(uuid.uuid4())[:8]}"
     
     pcap_files = ["example1.pcap", "example2.pcap"]
     output_ipfix_path = "output.ipfix"

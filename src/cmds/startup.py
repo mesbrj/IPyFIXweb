@@ -8,10 +8,10 @@ def init_app():
     # ipfix_collector_service()
 
 @validate_call
-def webapp_startup(
+async def webapp_startup(
     workers: int = 2,
     host: str = "0.0.0.0",
     port: int = 8000,
 ):
-    return async_multi_worker_web_server(workers, host, port)
+    await async_multi_worker_web_server(workers, host, port)
 

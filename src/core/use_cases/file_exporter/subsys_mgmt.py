@@ -15,24 +15,24 @@ logger = logging.getLogger(__name__)
 
 
 class _ProcessPoolSemaphore:
-    """Singleton semaphore for each Gunicorn worker to control process pool access"""
+    """Singleton (single-process/local-threads wide) semaphore for each Gunicorn uvicorn-worker to control process pool access"""
     _instance = None
-    
     def __init__(self, max_workers=2):
         self._max_workers = max_workers
         self._semaphore = asyncio.Semaphore(max_workers)
         logger.info(f"Created process pool semaphore with {max_workers} permits")
-    
+        _ProcessPoolSemaphore._instance = self
+
     @classmethod
     def get_instance(cls, max_workers=2):
         if cls._instance is None:
             cls._instance = cls(max_workers)
         return cls._instance
-    
+
     @property
     def semaphore(self):
         return self._semaphore
-    
+
     async def acquire(self, timeout=30):
         """Acquire semaphore with timeout"""
         try:
@@ -41,7 +41,7 @@ class _ProcessPoolSemaphore:
         except asyncio.TimeoutError:
             logger.warning(f"Failed to acquire process pool semaphore within {timeout}s")
             return False
-    
+
     def release(self):
         """Release semaphore"""
         try:
@@ -51,16 +51,20 @@ class _ProcessPoolSemaphore:
 
 
 class _ProcPool:
-    _instance = None
-    # Class-level list shared across all workers (preloaded Gunicorn workers)
-    _all_executors = []
+    """Singleton (single-process/local-threads proc_pool wide) process pool manager for each uvicorn-worker"""
+    # Dictionary to track proc_pool executors instances per worker process. 
+    # Other ondemand process (inside process pool, diferent from the worker process) can execute tasks (other new process).
+    _instances = {}
     
     def __init__(self, max_workers=2):
-        # Only create executor if this is a new instance (singleton per worker)
         self._max_workers = max_workers
         self._executor = ProcessPoolExecutor(max_workers=max_workers)
-        _ProcPool._all_executors.append(self._executor)
-        logger.info(f"Created executor #{len(_ProcPool._all_executors)} with {max_workers} max workers for process coordination")
+        self._worker_pid = os.getpid()  # Track which executor this belongs to
+        
+        # Store this instance for this executor PID (proc_pool)
+        _ProcPool._instances[self._worker_pid] = self
+        
+        logger.info(f"Created process pool executor with {max_workers} workers for worker PID {self._worker_pid}")
 
     @property
     def executor(self):
@@ -73,7 +77,6 @@ class _ProcPool:
         except Exception as e:
             logger.warning(f"Error checking executor health: {e}, attempting to recreate...")
             self._recreate_executor()
-        
         return self._executor
 
     def _recreate_executor(self):
@@ -99,7 +102,7 @@ class _ProcPool:
                         logger.debug("Current executor has no processes to kill")
             except Exception as e:
                 logger.warning(f"Error during child process cleanup: {e}")
-            
+
             # Shutdown the old executor
             if hasattr(self, '_executor') and self._executor:
                 try:
@@ -109,7 +112,6 @@ class _ProcPool:
             
             # Create new executor
             self._executor = ProcessPoolExecutor(max_workers=self._max_workers)
-            _ProcPool._all_executors.append(self._executor)
             logger.info(f"Successfully recreated process pool executor with {self._max_workers} workers")
             
         except Exception as e:
@@ -118,52 +120,54 @@ class _ProcPool:
 
     @classmethod
     def get_instance(cls, only_id: bool = False):
-        # Proper singleton: only create one instance per worker process
-        if cls._instance is None:
-            cls._instance = cls()
+        # Get current executor PID to check for existing instance
+        current_pid = os.getpid()
+        
+        # Check if we already have an instance for this executor
+        if current_pid not in cls._instances:
+            # Create new instance for this executor
+            cls._instances[current_pid] = cls()
+        
+        instance = cls._instances[current_pid]
+        
         if only_id:
-            return hex(id(cls._instance))
-        return cls._instance
+            return hex(id(instance))
+        return instance
 
     def proc_pool_release(self) -> None:
-        """Ultra-simple brutal shutdown - kill everything, ignore errors"""
-        logger.info("Starting brutal shutdown...")
+        logger.info("Starting shutdown...")
         killed_count = 0
-        
         try:
-            # Kill all processes from all executors
-            for i, executor in enumerate(_ProcPool._all_executors, 1):
-                logger.info(f"Force-killing executor #{i}")
-                
-                # Get processes and kill them - handle None case
-                processes = getattr(executor, '_processes', {})
-                if processes is not None and hasattr(processes, 'values'):
-                    for process in processes.values():
-                        try:
-                            if process is not None and hasattr(process, 'pid'):
-                                os.kill(process.pid, signal.SIGKILL)
-                                killed_count += 1
-                                logger.debug(f"Killed process {process.pid}")
-                        except:
-                            pass
-                else:
-                    logger.debug(f"Executor #{i} has no processes to kill")
-                
-                # Shutdown executor (non-blocking)
-                try:
-                    executor.shutdown(wait=False, cancel_futures=True)
-                except:
-                    pass
-            
-            logger.info(f"Brutal shutdown completed - killed {killed_count} processes")
+            processes = getattr(self._executor, '_processes', {})
+            if processes is not None and hasattr(processes, 'values'):
+                for process in processes.values():
+                    try:
+                        if process is not None and hasattr(process, 'pid'):
+                            os.kill(process.pid, signal.SIGKILL)
+                            killed_count += 1
+                            logger.debug(f"SIGKILL process {process.pid}")
+                    except:
+                        pass
+            else:
+                logger.debug(f"Has no processes to send SIGKILL")
+
+            # Shutdown executor (non-blocking)
+            try:
+                self._executor.shutdown(wait=False, cancel_futures=True)
+            except:
+                pass
+
+            logger.info(f"Shutdown completed - SIGKILL {killed_count} processes")
         except Exception as e:
             logger.error(f"Shutdown error: {e}")
-        finally:
-            # Always clear everything no matter what
-            _ProcPool._all_executors.clear()
 
 
 class _SharedMemoryList:
+    """
+    System Wide Singleton, for all child process, Gunicorn uvicorn-worker and threads.
+    Shared memory list for task management synchronization. Shared Resource initialized
+    exclusively in the main process before Gunicorn start/fork workers (--preload).
+    """
     _instance = None
     @validate_call
     def __init__(
@@ -233,7 +237,7 @@ class _SharedMemoryList:
             return cls()
 
     def instance_release(self):
-        """Ultra-simple shared memory cleanup"""
+        """Shared memory cleanup"""
         if self._instance is not None:
             logger.info("Starting shared memory cleanup...")
             
