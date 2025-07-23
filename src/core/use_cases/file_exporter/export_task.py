@@ -67,7 +67,7 @@ async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **k
                 # Run in process pool
                 loop = asyncio.get_event_loop()
                 await asyncio.wrap_future(loop.run_in_executor(proc_pool().executor, export_task, export_data))
-                
+
                 # Worker process handles completion, just log success here
                 logger.info(f"Task {task_id} completed successfully")
                 return {"status": "completed", "task_id": task_id}
@@ -122,5 +122,8 @@ async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **k
                 logger.debug(f"Task {task_id}: Released process pool semaphore")
 
 
-def file_export_service():
-    return (proc_pool(), simultaneous_tasks_list())
+def file_export_service(only_shm: bool):
+    if only_shm:        
+        return simultaneous_tasks_list()
+    else:
+        return (proc_pool(), simultaneous_tasks_list())

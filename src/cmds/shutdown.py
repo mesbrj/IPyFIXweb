@@ -19,7 +19,7 @@ def file_exporter_shutdown() -> None:
 
     try:
         # Get the service components
-        proc_pool_instance, shared_mem_instance = file_export_service()
+        proc_pool_instance, shared_mem_instance = file_export_service(only_shm=False)
         
         # Normal shutdown sequence
         logger.info("Shutting down process pool...")

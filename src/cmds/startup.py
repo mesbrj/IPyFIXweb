@@ -4,7 +4,7 @@ from adapters.web_api.fastapi.web_server import async_multi_worker_web_server
 from core.use_cases.file_exporter.export_task import file_export_service
 
 def init_app():
-    file_export_service()
+    file_export_service(only_shm=True)
     # ipfix_collector_service()
 
 @validate_call
