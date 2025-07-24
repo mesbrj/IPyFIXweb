@@ -7,6 +7,7 @@ from fastapi import FastAPI
 import atexit
 import signal
 import os
+import logging
 
 from cmds.shutdown import file_exporter_shutdown
 from adapters.web_api.fastapi.routes import test_router
@@ -24,14 +25,12 @@ atexit.register(file_exporter_shutdown)
 # Signal handlers for container environments
 def signal_handler(signum, frame):
     """Handle container shutdown signals"""
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info(f"Received signal {signum}, initiating graceful shutdown...")
+    logging.info(f"Received signal {signum}, initiating graceful shutdown...")
     
     try:
         file_exporter_shutdown()
     except Exception as e:
-        logger.error(f"Error during signal shutdown: {e}")
+        logging.error(f"Error during signal shutdown: {e}")
     finally:
         # Force exit if needed
         os._exit(0)
@@ -71,7 +70,6 @@ async def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0",
         host: Host to bind to
         port: Port to bind to
     """
-    import logging
     
     # Enforce minimum workers for multiprocessing.Queue avoidance
     if workers < 2:

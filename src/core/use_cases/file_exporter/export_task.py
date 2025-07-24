@@ -1,5 +1,6 @@
 """Export Task Manager - Ultra-compact task orchestrator"""
 
+import os
 import asyncio
 import logging
 import time
@@ -12,6 +13,7 @@ from .worker_handler import ExportTaskData, export_task
 
 logger = logging.getLogger(__name__)
 
+ 
 
 async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **kwargs) -> dict:
     """Ultra-compact task execution with bulletproof synchronization"""
@@ -65,8 +67,10 @@ async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **k
                 export_data = ExportTaskData(pcap_files, output_ipfix_path, kwargs)
                 
                 # Run in process pool
+                logger.info(f" ****** [before asyncio.wrap_future] Current process pool instances: {proc_pool()._instance}")
                 loop = asyncio.get_event_loop()
                 await asyncio.wrap_future(loop.run_in_executor(proc_pool().executor, export_task, export_data))
+                logger.info(f" ****** [after asyncio.wrap_future] Current process pool instances: {proc_pool()._instance}")
 
                 # Worker process handles completion, just log success here
                 logger.info(f"Task {task_id} completed successfully")
@@ -119,7 +123,7 @@ async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **k
             # Always release semaphore if acquired
             if semaphore_acquired:
                 semaphore_manager.release()
-                logger.debug(f"Task {task_id}: Released process pool semaphore")
+                logger.info(f"Task {task_id}: Released process pool semaphore")
 
 
 def file_export_service(only_shm: bool):

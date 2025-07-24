@@ -1,5 +1,5 @@
 """Ultra-compact worker process handler - Maximum efficiency"""
-
+import os
 import time
 import logging
 
@@ -39,6 +39,9 @@ def export_task(task_data: ExportTaskData):
 
         # Execute processing steps
         steps = ["Loading PCAP", "Parsing packets", "Applying DPI", "Converting IPFIX", "Writing output", "Analysis"]
+
+        logger.info(f" ****** Export task {task_id} started in worker process {os.getpid()} ########## {task_id}")
+
         for i, step in enumerate(steps, 1):
             logger.info(f"Step {i}/6: {step} - Task {task_id}")
             time.sleep(1)  # Simulate processing
