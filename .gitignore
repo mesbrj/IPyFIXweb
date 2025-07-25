@@ -1,6 +1,9 @@
 # IPyFIXweb workspace/project
 #  Local dev Jupyter Notebooks
 #  Auto Generated Backup and temp files
+#  Copilot work files
+.vscode/
+.copilot_work/
 *dev_local*.ipynb
 *.drawio.bkp
 *.drawio.dtmp

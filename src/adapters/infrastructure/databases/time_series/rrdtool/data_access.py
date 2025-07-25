@@ -20,7 +20,7 @@ from ports.repositories.time_series import DbPort
 ## RRDTool database for the entire system.
 service_tenant_uuid = "73861fb6-feb7-5bf2-a6ce-8fee04d1919b"
 service_tenant_path = "/var/ipyfix/tenants/rrdtool/"
-service_tenant_test_path = "tests/tenant_test/rrdtool/"
+service_tenant_test_path = "samples/tenant_test/rrdtool/"
 rdd_instances_dir_path = service_tenant_test_path
 class rrdb:
     """

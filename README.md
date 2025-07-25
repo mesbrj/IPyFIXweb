@@ -1,36 +1,165 @@
-# IPyFIXweb - Network Analyser (IPFIX and PCAP compatible)
+# IPyFIXweb
 
-What is IPyFIXweb ?
-What are the use cases and problems that it solve ?
-What are the components and how they work ?
+**Enterprise-grade IPFIX and PCAP traffic analysis and processing system.**
 
-- [Objectives](#objectives)
-- [Working Features](#working-features)
-- [Roadmap](#roadmap)
-- [Run application container](#run-application-conatiner)
+## Overview
 
-## Objectives
+IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion with Deep Packet Inspection (thanks to [**YAF**](https://tools.netsa.cert.org/yaf/index.html)), IPFIX capabilities: analysis, collector, mediator and exporter (thanks to [**pyfixbuf library**](https://tools.netsa.cert.org/pyfixbuf/doc/index.html)). Also analysis with timeseries data and PCAP decoding (thanks to [**scapy**](https://scapy.net/)).
 
-## Working Features
+## Architecture
 
-## Roadmap
+### Hexagonal Architecture
 
-## Run application conatiner
+![Hexagonal Architecture](docs/hexagonal.png)
 
->**Build container image (docker or podman):**
+### Process, Thread and Concurrence Model
 
-    podman build . -t ipyfix/web
+![Process, Thread and Concurrence Model](docs/process_threading_concurrence.png)
 
-![container_size](/docs/ipyfixweb_project/images/build_image.png)
+## Architecture Components
 
->**Run container (docker or podman):**
+| Component | Purpose | Location | Key Features |
+|-----------|---------|----------|--------------|
+| Task Manager | Bulletproof shared memory coordination | `src/core/use_cases/file_exporter/task_manager.py` | Thread-safe operations, brute-force cleanup, slot management |
+| Worker Handler | Process pool task execution | `src/core/use_cases/file_exporter/worker_handler.py` | Critical shared memory validation, comprehensive exception handling |
+| Export Orchestrator | Main task lifecycle management | `src/core/use_cases/file_exporter/export_task.py` | Semaphore-controlled access, timeout-based rejection |
+| System Management | Process pools and shared resources | `src/core/use_cases/file_exporter/subsys_mgmt.py` | Semaphore singletons, self-healing executors, shared memory manager, selective process cleanup |
+| Web Server | FastAPI application with signal handling | `src/adapters/web_api/fastapi/web_server.py` | Container-optimized shutdown, SIGTERM/SIGINT handlers |
+| Shutdown Handler | Graceful cleanup orchestration | `src/cmds/shutdown.py` | Pure Python shutdown, container-friendly exit |
 
-    podman run -d --name ipyfix-web-dev -p 8001:8000 ipyfix/web
+## Quick Start
 
-![container](/docs/ipyfixweb_project/images/app_container.png)
+### Prerequisites
+- Python 3.13+
+- Linux environment (WSL not recommended, issues with container image builds)
 
----
+### Installation
+```bash
+pip install -r requirements.txt
+```
 
-* [*Basic Examples*](/docs/examples/README.md)
+### Basic Usage
+```bash
+# Start development server
+python src/cmds/main.py
+```
 
-* [*Development info and details*](/docs/ipyfixweb_project/architecture/README.md)
+### API Endpoints
+```bash
+# Submit PCAP export task (test example)
+curl -X POST http://172.16.0.102:8000/api/v1/test/file_exporter/export_task
+
+POST /api/export-task
+{
+  "pcap_files": ["/path/to/file.pcap"],
+  "output_path": "/path/to/output.ipfix",
+  "DPI": true,
+  "analysis_list": ["tcp", "udp"]
+}
+
+# Get task status
+GET /api/task-status/{task_id}
+
+# List active tasks
+GET /api/tasks
+```
+
+## Configuration
+
+System behavior is controlled through:
+- **Worker count**: Configurable via `workers` parameter (default: 2)
+- **Task slots**: Maximum concurrent tasks per worker
+- **Timeout settings**: Lock acquisition and task completion timeouts
+- **Log directory**: `/var/log/IPyFIXweb/` for structured logging
+
+## Testing & Volume Tests
+
+### Basic Functionality Test
+```bash
+# Start the server
+python src/cmds/main.py
+
+# Submit single task
+curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task
+```
+
+### Simultaneous Load Testing
+```bash
+# Test semaphore-based flow control with simultaneous submissions
+# This tests the new prevention-based architecture
+
+# High-volume concurrent test (10 simultaneous tasks)
+for i in {1..10}; do
+  curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task &
+done
+wait
+
+# Extended volume test (50 tasks in batches)
+for batch in {1..5}; do
+  echo "Starting batch $batch..."
+  for i in {1..10}; do
+    curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task &
+  done
+  wait
+  echo "Batch $batch completed, waiting 2s..."
+  sleep 2
+done
+
+# Stress test - rapid fire submissions (tests semaphore limits)
+for i in {1..25}; do
+  curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task &
+  if [ $((i % 5)) -eq 0 ]; then
+    echo "Submitted $i tasks..."
+    sleep 1
+  fi
+done
+wait
+```
+
+### Container Testing
+```bash
+# Build and test container deployment
+podman build -t ipyfixweb-test .
+podman run --name ipyfixweb-test -p 8000:8000 -d ipyfixweb-test
+
+# Test container stability under load
+for i in {1..20}; do
+  curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task &
+done
+wait
+
+# Test graceful shutdown (should complete in ~30s)
+time podman stop ipyfixweb-test
+
+# Check logs for clean shutdown
+podman logs ipyfixweb-test | grep -E "(shutdown|cleanup|killed.*processes)"
+```
+
+### Process Pool Resilience Test
+```bash
+# Test process pool self-healing capabilities
+# Submit tasks to trigger potential BrokenProcessPool scenarios
+
+# Rapid concurrent submissions to stress process pool
+seq 1 30 | xargs -n1 -P10 -I{} curl -X POST http://localhost:8000/api/v1/test/file_exporter/export_task
+
+# Monitor logs for process pool recreation events
+tail -f /var/log/IPyFIXweb/*.log | grep -E "(recreat|broken|semaphore|killed.*process)"
+```
+
+### Performance Benchmarks
+```bash
+# Measure baseline performance
+time seq 1 20 | xargs -n1 -P5 -I{} curl -s -X POST http://localhost:8000/api/v1/test/file_exporter/export_task
+
+# Expected results:
+# - No server freezing under high load
+# - Consistent response times even when pool is saturated
+# - Graceful task rejection instead of timeouts
+```
+
+## Documentation
+
+- **Legacy documentation**: [`docs/legacy/`](docs/legacy/)
+- **API examples**: [`docs/examples/`](docs/examples/)
+- **Configuration samples**: [`samples/`](samples/)

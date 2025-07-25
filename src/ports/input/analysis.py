@@ -12,7 +12,7 @@ class timeSeriesPort(ABC):
     This class defines the interface for performing time series analyses and queries.
     """
     @abstractmethod
-    def instance_info(self, ts_uuid: Any = None):
+    async def instance_info(self, ts_uuid: Any = None):
         '''
         Retrieve information about a specific time series instance.
         :param ts_id: Identifier for the time series instance.
