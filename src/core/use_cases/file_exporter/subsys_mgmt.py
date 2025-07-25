@@ -28,7 +28,7 @@ class _ProcessPoolSemaphore:
         return cls._instance
 
     def __init__(self, max_workers=2):
-        if not hasattr(self, '_initialized'):            
+        if not hasattr(self, '_initialized'):
             self._max_workers = max_workers
             self._semaphore = asyncio.Semaphore(max_workers)
             _ProcessPoolSemaphore._instance = self

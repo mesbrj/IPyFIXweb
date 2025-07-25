@@ -1,33 +1,31 @@
 # IPyFIXweb
 
-**Enterprise-grade IPFIX traffic analysis and PCAP processing system with bulletproof multi-worker coordination.**
+**Enterprise-grade IPFIX and PCAP traffic analysis and processing system.**
 
 ## Overview
 
-IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion, DPI (Deep Packet Inspection), and real-time task management with cross-process synchronization.
+IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion with Deep Packet Inspection (thanks to [**YAF**](https://tools.netsa.cert.org/yaf/index.html)), IPFIX capabilities: analysis, collector, mediator and exporter (thanks to [**pyfixbuf library**](https://tools.netsa.cert.org/pyfixbuf/doc/index.html)). Also analysis with timeseries data and PCAP decoding (thanks to [**scapy**](https://scapy.net/)).
 
 ## Architecture
 
-- **Framework**: FastAPI with Gunicorn multi-worker deployment
-- **Concurrency**: ProcessPoolExecutor with semaphore-based flow control and shared memory coordination
-- **Flow Control**: Per-worker semaphore system preventing process pool overwhelming
-- **Process Management**: Self-healing process pools with automatic broken pool recovery
-- **Storage**: Cross-process task management with timeout-based locking and fail-safe cleanup
-- **Container Optimization**: Signal-based graceful shutdown with extended timeout handling
-- **Fault Isolation**: Cross-worker isolation ensuring one worker's failures don't affect others
+### Hexagonal Architecture
 
+![Hexagonal Architecture](docs/hexagonal.png)
 
-## Key Features
+### Process, Thread and Concurrence Model
 
-- ✅ **Multi-worker coordination** with shared memory synchronization
-- ✅ **Bulletproof task management** with duplicate prevention and timeout handling
-- ✅ **High-throughput processing** with configurable worker pools
-- ✅ **Real-time status tracking** across process boundaries
-- ✅ **Semaphore-based flow control** preventing process pool overwhelming
-- ✅ **Container-optimized deployment** with graceful shutdown handling
-- ✅ **Self-healing process pools** with automatic broken pool recovery
-- ✅ **Cross-worker isolation** ensuring fault containment
+![Process, Thread and Concurrence Model](docs/process_threading_concurrence.png)
 
+## Architecture Components
+
+| Component | Purpose | Location | Key Features |
+|-----------|---------|----------|--------------|
+| Task Manager | Bulletproof shared memory coordination | `src/core/use_cases/file_exporter/task_manager.py` | Thread-safe operations, brute-force cleanup, slot management |
+| Worker Handler | Process pool task execution | `src/core/use_cases/file_exporter/worker_handler.py` | Critical shared memory validation, comprehensive exception handling |
+| Export Orchestrator | Main task lifecycle management | `src/core/use_cases/file_exporter/export_task.py` | Semaphore-controlled access, timeout-based rejection |
+| System Management | Process pools and shared resources | `src/core/use_cases/file_exporter/subsys_mgmt.py` | Semaphore singletons, self-healing executors, shared memory manager, selective process cleanup |
+| Web Server | FastAPI application with signal handling | `src/adapters/web_api/fastapi/web_server.py` | Container-optimized shutdown, SIGTERM/SIGINT handlers |
+| Shutdown Handler | Graceful cleanup orchestration | `src/cmds/shutdown.py` | Pure Python shutdown, container-friendly exit |
 
 ## Quick Start
 
@@ -73,39 +71,6 @@ System behavior is controlled through:
 - **Task slots**: Maximum concurrent tasks per worker
 - **Timeout settings**: Lock acquisition and task completion timeouts
 - **Log directory**: `/var/log/IPyFIXweb/` for structured logging
-
-## Architecture Components
-
-| Component | Purpose | Location | Key Features |
-|-----------|---------|----------|--------------|
-| Task Manager | Bulletproof shared memory coordination | `src/core/use_cases/file_exporter/task_manager.py` | Thread-safe operations, brute-force cleanup, slot management |
-| Worker Handler | Process pool task execution | `src/core/use_cases/file_exporter/worker_handler.py` | Critical shared memory validation, comprehensive exception handling |
-| Export Orchestrator | Main task lifecycle management | `src/core/use_cases/file_exporter/export_task.py` | Semaphore-controlled access, timeout-based rejection |
-| System Management | Process pools and shared resources | `src/core/use_cases/file_exporter/subsys_mgmt.py` | Semaphore singletons, self-healing executors, shared memory manager, selective process cleanup |
-| Web Server | FastAPI application with signal handling | `src/adapters/web_api/fastapi/web_server.py` | Container-optimized shutdown, SIGTERM/SIGINT handlers |
-| Shutdown Handler | Graceful cleanup orchestration | `src/cmds/shutdown.py` | Pure Python shutdown, container-friendly exit |
-
-## Characteristics
-
-- **Startup time**: < 3 seconds for multi-worker deployment
-- **Shutdown time**: < 0.3 seconds with ultra-fast termination
-- **Throughput**: Optimized for high-volume concurrent processing
-- **Memory efficiency**: Shared memory coordination with minimal overhead
-- **Fault tolerance**: Comprehensive error handling with graceful degradation
-- **Process Pool Overflow Prevention**: Implemented per-worker semaphore system to prevent process pool overwhelming during high-volume loads
-- **Cross-Worker Isolation**: Enhanced process management to ensure one worker's failures don't affect other Gunicorn workers
-- **Intelligent Rate Limiting**: Automatic task rejection with timeout-based semaphore acquisition to maintain system stability
-- **Memory Management**: Improved shared memory cleanup with fail-safe mechanisms
-- **Broken Pool Recovery**: Automatic process pool recreation when BrokenProcessPool exceptions occur
-- **Selective Process Cleanup**: Workers now only terminate their own child processes, preventing cross-contamination
-- **Comprehensive Exception Coverage**: Enhanced handling for MemoryError, KeyboardInterrupt, and process termination scenarios
-
-## Production Considerations
-
-- Configure appropriate worker count based on CPU cores and workload
-- Monitor `/var/log/IPyFIXweb/` for task completion tracking
-- Implement log rotation for high-volume environments
-- Use reverse proxy (nginx/Apache) for production deployments
 
 ## Testing & Volume Tests
 
@@ -182,12 +147,6 @@ seq 1 30 | xargs -n1 -P10 -I{} curl -X POST http://localhost:8000/api/v1/test/fi
 tail -f /var/log/IPyFIXweb/*.log | grep -E "(recreat|broken|semaphore|killed.*process)"
 ```
 
-### Expected Test Results
-- **Semaphore Control**: Tasks should be queued/rejected when pool is full, not cause freezing 
-- **Process Isolation**: Worker failures shouldn't affect other workers
-- **Container Stability**: Graceful shutdown within 30 seconds
-- **Self-Healing**: Automatic recovery from BrokenProcessPool exceptions
-
 ### Performance Benchmarks
 ```bash
 # Measure baseline performance
@@ -204,11 +163,3 @@ time seq 1 20 | xargs -n1 -P5 -I{} curl -s -X POST http://localhost:8000/api/v1/
 - **Legacy documentation**: [`docs/legacy/`](docs/legacy/)
 - **API examples**: [`docs/examples/`](docs/examples/)
 - **Configuration samples**: [`samples/`](samples/)
-
-## License
-
-See [LICENSE](LICENSE) file for details.
-
----
-
-*Enterprise-grade network analysis for production environments.*
