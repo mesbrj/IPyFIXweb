@@ -29,10 +29,10 @@ IPyFIXweb is a high-performance, production-ready system for network traffic ana
 
 ## AI Agent Draft Plans
 
-The [Lua language](https://www.lua.org/) will be the way where the AI agent will execute and interact directly with the system. This project will integrate the Lua language in Cpython (standard Python implementation) with a [LuaJIT](https://luajit.org/)(just-in-time compiler). Thanks to [Lupa project](https://github.com/scoder/lupa) for this Python integration.
+The [Lua language](https://www.lua.org/) will be the way where the AI agent will execute and interact directly with the system. This project will integrate the Lua language in Cpython (standard Python implementation) with a [LuaJIT](https://luajit.org/) (just-in-time compiler). Thanks to [Lupa project](https://github.com/scoder/lupa) for this Python integration.
 
 
-* The IPFIX collector and exporter settings will be defined in Lua (a Lua conf style file), allowing the AI agent to dynamically create and modify export and collectors definitions based on real-time analysis and requirements.
+* The IPFIX collector and exporter settings will be defined in Lua (a Lua conf style file), allowing the AI agent to dynamically create and modify IPFIX exporters and collectors definitions based on real-time analysis and requirements.
 > The Lua integration will start here: settings defined in Lua (also outside the AI agent scope).
 
 * The IPFIX mediator pipelines will be defined and executed in Lua, enabling the AI agent to create new analysis / transformations pipelines and exporter definitions on-the-fly, adapting to network conditions and traffic patterns.
@@ -40,6 +40,12 @@ The [Lua language](https://www.lua.org/) will be the way where the AI agent will
 * Integrate the tasks and analysis (form RESTful API), enabling the AI agent to adjust analysis pipelines and tasks dynamically based on the data (passed from users and obtained from analyses in execution).
 
 > This part of system will bring a lot of engineering and development work. Should be good the [C fixbuf library](https://tools.netsa.cert.org/fixbuf/index.html) is implemented/integrated in Lua, so the agent will be able to use it directly. The [RRDLua](https://oss.oetiker.ch/rrdtool/prog/rrdlua.en.html) binding already exists, so the agent will be able to use it for time-series data analysis.
+
+## dev_roadmap
+- [ ] Complete PCAP to IPFIX (with DPI) conversion task.
+- [ ] IPFIX analysis: Paginated response with each record and information-elements (including DPI) decoded as JSON.
+  - [ ] Starting testing with [IPjFIXsvc](https://github.com/mesbrj/IPjFIXsvc).
+- [ ] IPFIX collector and Lua integration - Lua configuration file for IPFIX collector(s). Lua starts the Python IPFIX collector(s) according to the IPFIX collector configuration.
 
 ## Quick Start
 
@@ -162,9 +168,3 @@ time seq 1 20 | xargs -n1 -P5 -I{} curl -s -X POST http://localhost:8000/api/v1/
 # - Consistent response times even when pool is saturated
 # - Graceful task rejection instead of timeouts
 ```
-
-## Documentation
-
-- **Legacy documentation**: [`docs/legacy/`](docs/legacy/)
-- **API examples**: [`docs/examples/`](docs/examples/)
-- **Configuration samples**: [`samples/`](samples/)
