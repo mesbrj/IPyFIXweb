@@ -4,7 +4,7 @@
 
 ## Overview
 
-IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion with Deep Packet Inspection (thanks to [**YAF**](https://tools.netsa.cert.org/yaf/index.html)), IPFIX capabilities: analysis, collector, mediator and exporter (thanks to [**pyfixbuf library**](https://tools.netsa.cert.org/pyfixbuf/doc/index.html)). Also analysis with timeseries data and PCAP decoding (thanks to [**scapy**](https://scapy.net/)).
+IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion with Deep Packet Inspection (thanks to [**YAF**](https://tools.netsa.cert.org/yaf/index.html)), IPFIX capabilities: analysis, collector, mediator and exporter (thanks to [**pyfixbuf library**](https://tools.netsa.cert.org/pyfixbuf/doc/index.html)), and also analysis with time-series data and PCAP decoding (thanks to [**scapy**](https://scapy.net/)).
 
 ## Architecture
 
@@ -20,12 +20,26 @@ IPyFIXweb is a high-performance, production-ready system for network traffic ana
 
 | Component | Purpose | Location | Key Features |
 |-----------|---------|----------|--------------|
-| Task Manager | Bulletproof shared memory coordination | `src/core/use_cases/file_exporter/task_manager.py` | Thread-safe operations, brute-force cleanup, slot management |
+| Task Manager | shared memory coordination | `src/core/use_cases/file_exporter/task_manager.py` | Slot management, cleanup |
 | Worker Handler | Process pool task execution | `src/core/use_cases/file_exporter/worker_handler.py` | Critical shared memory validation, comprehensive exception handling |
 | Export Orchestrator | Main task lifecycle management | `src/core/use_cases/file_exporter/export_task.py` | Semaphore-controlled access, timeout-based rejection |
 | System Management | Process pools and shared resources | `src/core/use_cases/file_exporter/subsys_mgmt.py` | Semaphore singletons, self-healing executors, shared memory manager, selective process cleanup |
 | Web Server | FastAPI application with signal handling | `src/adapters/web_api/fastapi/web_server.py` | Container-optimized shutdown, SIGTERM/SIGINT handlers |
 | Shutdown Handler | Graceful cleanup orchestration | `src/cmds/shutdown.py` | Pure Python shutdown, container-friendly exit |
+
+## AI Agent Draft Plans
+
+The [Lua language](https://www.lua.org/) will be the way where the AI agent will execute and interact directly with the system. This project will integrate the Lua language in Cpython (standard Python implementation) with a [LuaJIT](https://luajit.org/)(just-in-time compiler). Thanks to [Lupa project](https://github.com/scoder/lupa) for this Python integration.
+
+
+* The IPFIX collector and exporter settings will be defined in Lua (a Lua conf style file), allowing the AI agent to dynamically create and modify export and collectors definitions based on real-time analysis and requirements.
+> The Lua integration will start here: settings defined in Lua (also outside the AI agent scope).
+
+* The IPFIX mediator pipelines will be defined and executed in Lua, enabling the AI agent to create new analysis / transformations pipelines and exporter definitions on-the-fly, adapting to network conditions and traffic patterns.
+
+* Integrate the tasks and analysis (form RESTful API), enabling the AI agent to adjust analysis pipelines and tasks dynamically based on the data (passed from users and obtained from analyses in execution).
+
+> This part of system will bring a lot of engineering and development work. Should be good the [C fixbuf library](https://tools.netsa.cert.org/fixbuf/index.html) is implemented/integrated in Lua, so the agent will be able to use it directly. The [RRDLua](https://oss.oetiker.ch/rrdtool/prog/rrdlua.en.html) binding already exists, so the agent will be able to use it for time-series data analysis.
 
 ## Quick Start
 
@@ -63,15 +77,6 @@ GET /api/task-status/{task_id}
 # List active tasks
 GET /api/tasks
 ```
-
-## Configuration
-
-System behavior is controlled through:
-- **Worker count**: Configurable via `workers` parameter (default: 2)
-- **Task slots**: Maximum concurrent tasks per worker
-- **Timeout settings**: Lock acquisition and task completion timeouts
-- **Log directory**: `/var/log/IPyFIXweb/` for structured logging
-
 ## Testing & Volume Tests
 
 ### Basic Functionality Test
