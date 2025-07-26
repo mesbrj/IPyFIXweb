@@ -33,13 +33,10 @@ The [Lua language](https://www.lua.org/) will be the way where the AI agent will
 
 
 * The IPFIX collector and exporter settings will be defined in Lua (a Lua conf style file), allowing the AI agent to dynamically create and modify IPFIX exporters and collectors definitions based on real-time analysis and requirements.
-> The Lua integration will start here: settings defined in Lua (also outside the AI agent scope).
 
 * The IPFIX mediator pipelines will be defined and executed in Lua, enabling the AI agent to create new analysis / transformations pipelines and exporter definitions on-the-fly, adapting to network conditions and traffic patterns.
 
 * Integrate the tasks and analysis (form RESTful API), enabling the AI agent to adjust analysis pipelines and tasks dynamically based on the data (passed from users and obtained from analyses in execution).
-
-> This part of system will bring a lot of engineering and development work. Should be good the [C fixbuf library](https://tools.netsa.cert.org/fixbuf/index.html) is implemented/integrated in Lua, so the agent will be able to use it directly. The [RRDLua](https://oss.oetiker.ch/rrdtool/prog/rrdlua.en.html) binding already exists, so the agent will be able to use it for time-series data analysis.
 
 ## dev_roadmap
 - [ ] Complete PCAP to IPFIX (with DPI) conversion task.
