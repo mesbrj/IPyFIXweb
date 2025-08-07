@@ -70,34 +70,28 @@ class DbPort(ABC):
 def timeSeriesDb(
         db_type: str = "rrd",
         ts_uuid: Any = None,
-        storage: str = None
+        storage: str = "local",
     ) -> DbPort:
     """
     Factory function to get the appropriate time series database instance.
     at this moment only RRDTool is supported, but this function can be extended to support other timeseries (InfluxDB for example), to working together or defining one at startup. The supported RRDTool values to the storage argument are:
 
-    - 'local': stored on the local filesystem (read/write mode).
-    - 's3': stored on S3 (read only mode).
-
     :param db_type: Type of the database (default is 'rrd').
     :param ts_uuid: Identifier for the time series instance.
-    :param storage: Type of the storage ('s3', 'local').
+    :param storage: Type of the storage ('local').
     :return: Instance of the specified time series database.
     """
     from adapters.infrastructure.databases.time_series.rrdtool.data_access import (
-        rrdb_s3,
         rrdb_local,
     )
     if not ts_uuid:
         raise ValueError("ts_uuid must be provided to identify the time-series instance.")
     if db_type != "rrd":
         raise ValueError(f"Unknown time-series DB type: {db_type}")
-    if storage == 'local' or storage == None:
+    if storage == 'local':
         return rrdb_local(ts_uuid=ts_uuid)
-    elif storage == 's3':
-        return rrdb_s3(ts_uuid=ts_uuid)
     else:
         raise ValueError(
             f"Unknown storage type: {storage}. "
-            "Supported types are 'local' or 's3'."
+            "Supported types are 'local'."
             )

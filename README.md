@@ -2,6 +2,8 @@
 
 **Enterprise-grade IPFIX and PCAP traffic analysis and processing system.**
 
+A part of the [IPFIXscenario project](https://github.com/mesbrj/IPFIXscenario).
+
 ## Overview
 
 IPyFIXweb is a high-performance, production-ready system for network traffic analysis, featuring PCAP to IPFIX conversion with Deep Packet Inspection (thanks to [**YAF**](https://tools.netsa.cert.org/yaf/index.html)), IPFIX capabilities: analysis, collector, mediator and exporter (thanks to [**pyfixbuf library**](https://tools.netsa.cert.org/pyfixbuf/doc/index.html)), and also analysis with time-series data and PCAP decoding (thanks to [**scapy**](https://scapy.net/)).
