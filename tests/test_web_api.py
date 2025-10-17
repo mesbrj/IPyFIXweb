@@ -45,5 +45,6 @@ def test_fake_time_series(client, time_series_uuid):
     assert data1["measurements_list"] == []
     assert response2.status_code == 200
     assert data2["measurements"][0]["tags"] == ["HTTPS"]
+    assert data2["measurements"][1]["data_sources_info"][2] == ["AVERAGE", 7200, 7084, 1, 0.5]
     assert response3.status_code == 404
     assert data3["detail"]["error"] == "Time series instance not found"
