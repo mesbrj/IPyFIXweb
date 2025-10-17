@@ -77,7 +77,7 @@ async def async_multi_worker_web_server(workers: int = 2, host: str = "0.0.0.0",
         logging.warning(f"Minimum 2 workers required for proper multiprocessing. Setting workers to {workers}")
     
     # Limit maximum workers to prevent resource exhaustion
-    if workers > 4:
+    elif workers > 4:
         workers = 4
         logging.warning(f"Limiting workers to {workers} to prevent resource exhaustion")
     
