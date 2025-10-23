@@ -33,18 +33,22 @@ def test_export_fake_task(client):
     assert data["status"] == "export task started"
 
 def test_fake_time_series(client, time_series_uuid):
-    response1 = client.get(f"/api/v1/test/time_series/{time_series_uuid[0]}")
-    data1 = response1.json()
-    response2 = client.get(f"/api/v1/test/time_series/{time_series_uuid[1]}")
-    data2 = response2.json()
-    response3 = client.get(f"/api/v1/test/time_series/{time_series_uuid[2]}")
-    data3 = response3.json()
+    response = client.get(f"/api/v1/test/time_series/{time_series_uuid[0]}")
+    data = response.json()
 
-    assert response1.status_code == 200
-    assert data1["ts_uuid"] == time_series_uuid[0]
-    assert data1["measurements_list"] == []
-    assert response2.status_code == 200
-    assert data2["measurements"][0]["tags"] == ["HTTPS"]
-    assert data2["measurements"][1]["data_sources_info"][2] == ["AVERAGE", 7200, 7084, 1, 0.5]
-    assert response3.status_code == 404
-    assert data3["detail"]["error"] == "Time series instance not found"
+    assert response.status_code == 200
+    assert data["ts_uuid"] == time_series_uuid[0]
+    assert data["measurements_list"] == []
+
+    response = client.get(f"/api/v1/test/time_series/{time_series_uuid[1]}")
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["measurements"][0]["tags"] == ["HTTPS"]
+    assert data["measurements"][1]["data_sources_info"][2] == ["AVERAGE", 7200, 7084, 1, 0.5]
+
+    response = client.get(f"/api/v1/test/time_series/{time_series_uuid[2]}")
+    data = response.json()
+
+    assert response.status_code == 404
+    assert data["detail"]["error"] == "Time series instance not found"
