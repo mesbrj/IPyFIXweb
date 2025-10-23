@@ -1,14 +1,14 @@
 <mxfile host="65bd71144e">
     <diagram name="Página-1" id="d8PLGoHHIkSsOKgrOYxZ">
-        <mxGraphModel dx="1386" dy="1579" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1916" dy="1620" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="go_973DKaNfCa8tB1y57-23" value="" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=2;hachureGap=8;fillColor=#f5f5f5;fillStyle=dots;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#666666;gradientColor=#b3b3b3;" parent="1" vertex="1">
-                    <mxGeometry x="57.5" y="148" width="230" height="80" as="geometry"/>
+                    <mxGeometry x="355" y="263" width="230" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-22" value="" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=2;hachureGap=8;fillColor=#f5f5f5;fillStyle=dots;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#666666;gradientColor=#b3b3b3;" parent="1" vertex="1">
-                    <mxGeometry x="43.5" y="135" width="230" height="80" as="geometry"/>
+                    <mxGeometry x="341" y="250" width="230" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-3" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#9090FF,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
                     <mxGeometry x="30" y="-76" width="220" height="136" as="geometry"/>
@@ -16,7 +16,18 @@
                 <mxCell id="go_973DKaNfCa8tB1y57-4" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#9090FF,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
                     <mxGeometry x="40" y="-66" width="230" height="146" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-5" value="&lt;font face=&quot;Comic Sans MS&quot; style=&quot;font-size: 15px;&quot;&gt;u&lt;/font&gt;&lt;font face=&quot;Comic Sans MS&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;uvicorn worker process (parallel)&lt;/span&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;- HTTP Request/Response asyncio (coroutines)&lt;/div&gt;&lt;div style=&quot;&quot;&gt;- fork() Process Pool for backgroud (CPU bound) tasks&lt;/div&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#9090FF,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
+                <mxCell id="14" style="edgeStyle=none;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.873;entryY=0.98;entryDx=0;entryDy=0;entryPerimeter=0;sketch=1;curveFitting=1;jiggle=2;strokeColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-5" target="12">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1080" y="-270" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="230" y="140"/>
+                            <mxPoint x="230" y="150"/>
+                            <mxPoint x="640" y="150"/>
+                            <mxPoint x="1080" y="150"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="go_973DKaNfCa8tB1y57-5" value="&lt;font face=&quot;Comic Sans MS&quot; style=&quot;font-size: 15px;&quot;&gt;u&lt;/font&gt;&lt;font face=&quot;Comic Sans MS&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;uvicorn worker process (parallel)&lt;/span&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;- HTTP Request/Response asyncio (coroutines)&lt;/div&gt;&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#9090FF,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
                     <mxGeometry x="50" y="-56" width="240" height="146" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" source="go_973DKaNfCa8tB1y57-10" edge="1">
@@ -24,8 +35,19 @@
                         <mxPoint x="170.28571428571422" y="-80" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" source="go_973DKaNfCa8tB1y57-10" target="go_973DKaNfCa8tB1y57-12" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="9" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-10" target="6">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="740" y="-215"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=none;html=1;entryX=0.236;entryY=0.99;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.006;exitY=0.308;exitDx=0;exitDy=0;exitPerimeter=0;sketch=1;curveFitting=1;jiggle=2;strokeColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-10" target="12">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="737" y="-240"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-10" value="&lt;span&gt;&lt;font face=&quot;Comic Sans MS&quot; style=&quot;font-size: 15px;&quot;&gt;Gunicorn main (single) process -&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;HTTP Server&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#A9C4EB,#198CC4);sketch=1;curveFitting=1;jiggle=2;fontStyle=0" parent="1" vertex="1">
                     <mxGeometry x="40" y="-280" width="520" height="130" as="geometry"/>
@@ -34,43 +56,72 @@
                     <mxGeometry x="320" y="-60" width="330" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-12" value="&lt;b&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;uvicorn worker process&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#FFCE9F,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
-                    <mxGeometry x="670" y="-160" width="270" height="100" as="geometry"/>
+                    <mxGeometry x="680" y="-53" width="270" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-13" value="&lt;b&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;uvicorn worker process&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#FFCE9F,#198CC4);sketch=1;curveFitting=1;jiggle=2;" parent="1" vertex="1">
-                    <mxGeometry x="680" y="-150" width="280" height="100" as="geometry"/>
+                    <mxGeometry x="690" y="-43" width="280" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-14" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;IPFIX Collector process&amp;nbsp;&lt;/span&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot; face=&quot;Comic Sans MS&quot;&gt;(&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;parallel&lt;/span&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot; face=&quot;Comic Sans MS&quot;&gt;). O&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;ne unique&amp;nbsp;&lt;u&gt;listening TCP&amp;nbsp;&lt;/u&gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;&lt;u&gt;socket&lt;/u&gt; per process&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- &lt;u&gt;asyncio&lt;/u&gt;&amp;nbsp;&lt;/span&gt;&lt;u style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;(&lt;/u&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;coroutines&lt;/span&gt;&lt;u style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;)&lt;/u&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;multi clients connections per socket&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#FFCE9F,#198CC4);sketch=1;align=center;verticalAlign=top;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;" parent="1" vertex="1">
-                    <mxGeometry x="690" y="-140" width="290" height="100" as="geometry"/>
-                </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-18" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;CPUI bound tasks process (parallel)&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=2;hachureGap=8;fillColor=#f5f5f5;fillStyle=dots;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#666666;gradientColor=#b3b3b3;" parent="1" vertex="1">
-                    <mxGeometry x="32.5" y="120" width="230" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.408;entryY=-0.027;entryDx=0;entryDy=0;entryPerimeter=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" edge="1">
+                <mxCell id="16" style="edgeStyle=none;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;sketch=1;curveFitting=1;jiggle=2;strokeColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-14" target="12">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="468" y="-150" as="sourcePoint"/>
-                        <mxPoint x="468.4000000000001" y="-63.50999999999999" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="845" y="110"/>
+                            <mxPoint x="1013" y="110"/>
+                        </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-27" value="fork()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" vertex="1">
-                    <mxGeometry x="170" y="-149" width="60" height="30" as="geometry"/>
+                <mxCell id="go_973DKaNfCa8tB1y57-14" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;IPFIX Collector process&amp;nbsp;&lt;/span&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot; face=&quot;Comic Sans MS&quot;&gt;(&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;parallel&lt;/span&gt;&lt;font style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot; face=&quot;Comic Sans MS&quot;&gt;). O&lt;/font&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;ne unique&amp;nbsp;&lt;u&gt;listening TCP&amp;nbsp;&lt;/u&gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-size: 15px;&quot;&gt;&lt;u&gt;socket&lt;/u&gt; per process&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- &lt;u&gt;asyncio&lt;/u&gt;&amp;nbsp;&lt;/span&gt;&lt;u style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;(&lt;/u&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;coroutines&lt;/span&gt;&lt;u style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;)&lt;/u&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 15px;&quot;&gt;multi clients connections per socket&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=light-dark(#FFCE9F,#198CC4);sketch=1;align=center;verticalAlign=top;curveFitting=1;jiggle=2;fontFamily=Comic Sans MS;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="-33" width="290" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-29" value="fork()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" vertex="1">
-                    <mxGeometry x="470" y="-149" width="60" height="30" as="geometry"/>
+                <mxCell id="go_973DKaNfCa8tB1y57-18" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;CPUI bound tasks process (parallel)&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=2;hachureGap=8;fillColor=#f5f5f5;fillStyle=dots;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#666666;gradientColor=#b3b3b3;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="235" width="230" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-31" value="fork()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" vertex="1">
-                    <mxGeometry x="560" y="-217" width="60" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-32" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Threads (living/running only in main process) - IPFIX Services Loops:&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX collector manager&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX exporter manager&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX files (RFC 5655) life-cycle&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- ...&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=#dae8fc;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#6c8ebf;align=center;verticalAlign=top;" parent="1" vertex="1">
+                <mxCell id="go_973DKaNfCa8tB1y57-32" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Threads (living/running only in main process) - IPFIX Services Loops:&lt;/b&gt;&lt;/font&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX collector manager&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX exporter manager&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- IPFIX files (RFC 5655) life-cycle&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;- ...&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=#dae8fc;sketch=1;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;strokeColor=#6c8ebf;align=center;verticalAlign=top;" parent="1" vertex="1">
                     <mxGeometry x="40" y="-430" width="517" height="110" as="geometry"/>
                 </mxCell>
                 <mxCell id="go_973DKaNfCa8tB1y57-36" value="" style="line;strokeWidth=2;direction=south;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" vertex="1">
                     <mxGeometry x="410" y="-320" width="10" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-37" value="Shared memory, locks, signals, semaphores are used&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;to coordinate and synchronize the usage&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;of the system and resources&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=20;" parent="1" vertex="1">
-                    <mxGeometry x="557" y="-350" width="510" height="90" as="geometry"/>
+                <mxCell id="2" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;- &lt;b&gt;forkserver&lt;/b&gt; Process Pool (in each worker process)&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;for backgroud (CPU bound) tasks&lt;/span&gt;&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rounded=1;sketch=1;fillWeight=4;hachureGap=8;hachureAngle=45;jiggle=2;curveFitting=1;strokeColor=#d6b656;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fillColor=#fff2cc;gradientColor=#ffd966;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="177" width="285" height="58" as="geometry"/>
                 </mxCell>
-                <mxCell id="go_973DKaNfCa8tB1y57-39" value="" style="line;strokeWidth=2;direction=south;html=1;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" parent="1" vertex="1">
-                    <mxGeometry x="150" y="90" width="10" height="32" as="geometry"/>
+                <mxCell id="3" style="edgeStyle=none;html=1;entryX=0.563;entryY=-0.017;entryDx=0;entryDy=0;entryPerimeter=0;sketch=1;curveFitting=1;jiggle=2;exitX=0.638;exitY=0.973;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-5" target="2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="1" source="2" target="go_973DKaNfCa8tB1y57-18">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="445" y="210"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="7" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="1" source="6" target="go_973DKaNfCa8tB1y57-11">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="485" y="-120"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" style="edgeStyle=none;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="1" source="6" target="go_973DKaNfCa8tB1y57-12">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="883" y="-120"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="6" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;- &lt;b&gt;forkserver &lt;/b&gt;Process Pool for&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;IPFIX Service network&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Comic Sans MS&amp;quot;; font-size: 15px;&quot;&gt;connections&lt;/span&gt;&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rounded=1;sketch=1;fillWeight=4;hachureGap=8;hachureAngle=45;jiggle=2;curveFitting=1;strokeColor=#d6b656;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fillColor=#fff2cc;gradientColor=#ffd966;" vertex="1" parent="1">
+                    <mxGeometry x="620" y="-150" width="240" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 20px; text-wrap-mode: nowrap;&quot;&gt;&lt;b style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;Multiprocessing.Manager&lt;/b&gt;&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 20px; text-wrap-mode: nowrap;&quot;&gt;(server process) for shareable (cross process)&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-family: &amp;quot;Architects Daughter&amp;quot;; font-size: 20px; text-wrap-mode: nowrap;&quot;&gt;safe managed objects and&amp;nbsp;&lt;span style=&quot;color: rgb(63, 63, 63); background-color: transparent;&quot;&gt;queues&lt;/span&gt;&lt;/div&gt;" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rotation=0;sketch=1;curveFitting=1;jiggle=2;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="610" y="-380" width="540" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;sketch=1;curveFitting=1;jiggle=2;entryX=0.809;entryY=1.02;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;endArrow=none;endFill=0;" edge="1" parent="1" source="go_973DKaNfCa8tB1y57-11" target="12">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1063" y="-280" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="485" y="130"/>
+                            <mxPoint x="1045" y="130"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
