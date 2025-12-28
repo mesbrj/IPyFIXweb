@@ -127,7 +127,7 @@ async def execute_export_task(pcap_files: list[str], output_ipfix_path: str, **k
 
 
 def file_export_service(only_shm: bool):
-    if only_shm:        
+    if only_shm:
         return simultaneous_tasks_list()
     else:
         return (proc_pool(), simultaneous_tasks_list())

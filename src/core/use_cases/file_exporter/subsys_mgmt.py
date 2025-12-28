@@ -3,7 +3,7 @@ import logging
 import os
 import signal
 import asyncio
-from multiprocessing import Lock
+from multiprocessing import Manager, get_context
 from multiprocessing.managers import SharedMemoryManager
 from concurrent.futures import ProcessPoolExecutor
 
@@ -88,7 +88,7 @@ class _ProcPool:
 
         logger.info(f" ****** INITIALIZING NEW instance {hex(id(self))} for PID {os.getpid()}")
         self._max_workers = max_workers
-        self._executor = ProcessPoolExecutor(max_workers=max_workers)
+        self._executor = ProcessPoolExecutor(max_workers=max_workers, mp_context=get_context('forkserver'))
         self._worker_pid = os.getpid()
         self._initialized = True
         logger.info(f" ****** Created process pool executor with {max_workers} workers for worker PID {self._worker_pid}")
@@ -218,7 +218,7 @@ class _SharedMemoryList:
                 [byte_serialized_data] * self._max_items
             )
             self._shared_list_name = self._shared_list.shm.name
-            self._shared_list_lock = Lock()
+            self._shared_list_lock = Manager().Lock()
             _SharedMemoryList._instance = self
             self._initialized = True
 
