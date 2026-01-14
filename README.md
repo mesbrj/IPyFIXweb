@@ -19,5 +19,5 @@
 This will be achieved using the `psutil` library to gather CPU usage metrics and statistics for each specifically identified OS process. The detailed telemetry will be captured and exported using the OpenTelemetry SDK and APIs for Python using the OpenTelemetry metrics capabilities.
 
 With the detailed telemetry captured for each specifically identified OS process, we are able to identify adjustment needs:
-- Increase or decrease the number of CPUs defined for the containers running the services (K8s CPU requests and limits).
+- Increase or decrease the CPUs amd/or Memory defined for the containers running the services (K8s requests and limits).
 - Increase or decrease the number of worker processes in the Python *process-pool-executor* of the services.
