@@ -132,7 +132,7 @@ IPFIXServices implements a **microservices architecture** with Kubernetes-native
 
 **Deployment Characteristics**:
 - **Type**: DaemonSet (node-level presence)
-- **CPU Requests**: 2+ cores (Mediator + Collector combined)
+- **CPU Requests**: 2+ cores (for Mediator and Collector containers)
 - **Exposed Services**:
   - LoadBalancer (HTTP) for D-Bus controller
   - LoadBalancer (TCP) for Collector service
@@ -143,18 +143,16 @@ IPFIXServices implements a **microservices architecture** with Kubernetes-native
 1. **Node-Level Presence**:
    - Automatic pod placement on each node
    - Instant standby replicas for failover
-   - Simplified network locality
+   - Reduced scheduling latency during failover
 
 2. **Multi-Container Sidecar Pattern**:
-   - **Shared network namespace**: Containers communicate via localhost
    - **Efficient IPC**: D-Bus provides microsecond latency
    - **Lifecycle coupling**: D-Bus controls when Mediator/Collector start
    - **Process isolation**: Each service maintains security boundaries
 
 3. **Resource Co-location**:
-   - Single pod shares CPU/memory allocation efficiently
    - Reduced scheduling complexity
-   - Better cache locality for related workloads
+   - Better cache and data locality for related workloads
 
 ---
 
@@ -262,6 +260,7 @@ func (c *Controller) Run() {
 | Benefit | Description |
 |---------|-------------|
 | **No Split-Brain** | Only one active instance can bind to ports/process flows |
+| **Single Active Instance** | Ensures only one IPFIX collector and exporter is active at a time (no data conflicts and duplicate processing) |
 | **Fast Failover** | Standby pods on multiple nodes ready instantly (2-5 seconds typical) |
 | **Kubernetes-Native** | Uses built-in APIs, no external dependencies (Consul, etcd) |
 | **Simple Operations** | No manual intervention for failover or recovery |
@@ -389,7 +388,7 @@ async def analyze_pcap(file: UploadFile):
 
 ### Backpressure and Circuit Breaker
 
-While ProcessPoolExecutor provides superior performance, it requires manual backpressure handling:
+While ProcessPoolExecutor provides superior performance, it requires backpressure handling:
 
 #### 1. Task Queue Monitoring
 
@@ -1200,9 +1199,9 @@ With this telemetry strategy, you can answer critical questions:
 
 ---
 
-## Summary: Architectural Excellence
+## Architectural Summary:
 
-IPFIXServices demonstrates production-grade distributed systems design:
+Production-grade distributed systems design:
 
 1. **Kubernetes-Native HA**: Leader election without external dependencies
 2. **Performance-First**: ProcessPoolExecutor for microsecond latency vs. K8s Jobs' seconds
@@ -1216,4 +1215,4 @@ The architecture balances:
 - **Resource efficiency** (warm process pools)
 - **Observability** (granular metrics with business context)
 
-This is a reference architecture for **real-time, stateful, high-throughput microservices** on Kubernetes.
+This architecture aims for **real-time, stateful, high-throughput microservices** on Kubernetes.
